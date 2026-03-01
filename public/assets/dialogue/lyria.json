@@ -1,0 +1,79 @@
+[
+  {
+    "text": "You came all the way here.",
+    "options": [
+      {
+        "label": "I wanted to see what was at the edge.",
+        "next": 1
+      },
+      {
+        "label": "Someone mentioned the river. I was curious.",
+        "next": 5
+      },
+      {
+        "label": "I walked until I couldn't walk further.",
+        "next": 9
+      }
+    ]
+  },
+  {
+    "text": "And now that you're here?\nWas it worth the walk?",
+    "options": [
+      {
+        "label": "Honestly I didn't expect to make it all the way.",
+        "next": 2
+      },
+      {
+        "label": "I'm glad I did. Is this where you spend most of your time?",
+        "next": 3
+      },
+      {
+        "label": "I thought it would go further than this.",
+        "next": 4
+      }
+    ]
+  },
+  {"text": "Most things surprise you when you actually do them. Go on with your journey."},
+  {"text": "When I can. It gets crowded in my head elsewhere."},
+  {"text": "Most things don't. That's usually the point."},
+  {
+    "text": "What did they say about it?",
+    "options": [
+      {
+        "label": "That it was worth seeing. They were right.",
+        "next": 6
+      },
+      {
+        "label": "Not much. Just that you were here.",
+        "next": 7
+      },
+      {
+        "label": "That it goes further than it looks.",
+        "next": 8
+      }
+    ]
+  },
+  {"text": "People usually are, about the things they love."},
+  {"text": "And you came anyway."},
+  {"text": "There is only one way to know, but no one crossed it."},
+  {
+    "text": "That's usually how the right things happen.\nDoes it go far enough for you?",
+    "options": [
+      {
+        "label": "I think so. I needed the walk more than the destination.",
+        "next": 10
+      },
+      {
+        "label": "I don't know yet. I wasn't sure I was expecting company.",
+        "next": 11
+      },
+      {
+        "label": "Not really. I'd keep going if I could.",
+        "next": 12
+      }
+    ]
+  },
+  {"text": "Then you already got what you came for."},
+  {"text": "Neither was I."},
+  {"text": "Is something really stopping you?"}
+]

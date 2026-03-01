@@ -1,0 +1,79 @@
+[
+  {
+    "text": "Oh, you're new! I could tell from across the field, I’m smart like that.\nHow is it, arriving somewhere you've never been?",
+    "options": [
+      {
+        "label": "Quiet. I needed that.",
+        "next": 1
+      },
+      {
+        "label": "Good, I like that there are people around.",
+        "next": 5
+      },
+      {
+        "label": "Bigger than I expected, actually a little overwhelming.",
+        "next": 9
+      }
+    ]
+  },
+  {
+    "text": "Quiet is good. I like quiet too, sometimes. Not often, but sometimes, I can’t really stay quiet so not really, I know I talk in my sleep as well, which is definitely not quiet.\nThe farm's yours, right? I’m sure you’re an expert farmer, please be an expert farmer, someone needs to take good care of this place",
+    "options": [
+      {
+        "label": "Yes, it's the first place I went, and yes I’m pretty good at waiting for a crop to grow.",
+        "next": 2
+      },
+      {
+        "label": "Expert, I don’t know, I only spent a bit of time there, but I wanted to meet people first.",
+        "next": 3
+      },
+      {
+        "label": "Looks like it, but I was more interested in exploring the rest of the town.",
+        "next": 4
+      }
+    ]
+  },
+  {"text": "That’s great to know! Waiting, that’s such a hard thing to do, I hate it."},
+  {"text": "Oh I like that. Talking to people is so fun, but listening, that’s already too much for me!"},
+  {"text": "Yay there is so much to see here! Me personally, I love being near the lake, it feels good, and since it’s in the center of the town, I can talk to everyone that crosses my path!"},
+  {
+    "text": "Right? We're not that many but we make up for it, and I’m pretty sure I’m worth at least 2 people, maybe even 3.",
+    "options": [
+      {
+        "label": "I believe it. You're hard to miss.I could use this energy of yours.",
+        "next": 6
+      },
+      {
+        "label": "Do the others agree with that assessment?",
+        "next": 7
+      },
+      {
+        "label": "Is it always this lively here?",
+        "next": 8
+      }
+    ]
+  },
+  {"text": "Exactly! See, you get it already, I knew I'd like you."},
+  {"text": "Alex definitely does not. But he smiles when I'm around so I'm counting it."},
+  {"text": "Depends on the day. Today feels good though. Tomorrow will also. Actually as long as I am here, every day will be great."},
+  {
+    "text": "No way, really??, I mean, it hits you all at once when you’re not used to it, just like me when I start talking, according to my friends here\n.As long it’s overwhelming in a good way, right? Like, you still want to be here?",
+    "options": [
+      {
+        "label": "Yes. I think I needed a place like this.",
+        "next": 10
+      },
+      {
+        "label": "Of course!, especially seeing there are people around.",
+        "next": 11
+      },
+      {
+        "label": "It’s a nice place, but I’d like to go further.",
+        "next": 12
+      }
+    ]
+  },
+  {"text": "Then it's already working! So exciting! I’m sure the more you’ll stay the more you’ll enjoy it."},
+  {"text": "We have that effect apparently, especially me right? Don’t answer I know I’m your favorite so far."},
+  {"text": "Further where? There's a river at the edge, I never tried to go past it, I don’t think anyone can swim here."}
+]

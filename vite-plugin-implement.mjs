@@ -7,6 +7,20 @@ export function implementPlugin() {
     let env = {};
     let client = null;
 
+    async function mistralWithRetry(params) {
+        const delays = [2000, 15000, 62000];
+        for (let i = 0; ; i++) {
+            try {
+                return await client.agents.complete(params)
+            } catch (err) {
+                const is429 = err.statusCode === 429 || err.message?.includes('429');
+                if (!is429 || i >= delays.length) throw err;
+                console.warn(`⏳ Rate limited. Retrying in ${delays[i] / 1000}s...`);
+                await new Promise(r => setTimeout(r, delays[i]));
+            }
+        }
+    }
+
     return {
         name: 'mistral-implement',
 
@@ -17,16 +31,16 @@ export function implementPlugin() {
         configureServer(server) {
             client = new Mistral({apiKey: env.VITE_MISTRAL_API_KEY});
 
-            console.log('Indexing the codebase...');
-            try {
-                execSync('npm run index-code', {
-                    stdio: 'inherit',
-                    env: {...process.env, ...env}
-                });
-                console.log('Indexing done.');
-            } catch (err) {
-                console.error('❌ Failed to index the codebase:', err.message);
-            }
+            // console.log('Indexing the codebase...');
+            // try {
+            //     execSync('npm run index-code', {
+            //         stdio: 'inherit',
+            //         env: {...process.env, ...env}
+            //     });
+            //     console.log('Indexing done.');
+            // } catch (err) {
+            //     console.error('❌ Failed to index the codebase:', err.message);
+            // }
 
             server.middlewares.use('/api/implement', async (req, res) => {
                 if (req.method !== 'POST') {
@@ -47,19 +61,6 @@ export function implementPlugin() {
                     const structure = fs.readFileSync('project_structure.txt', 'utf8');
                     const currentFeature = fs.readFileSync('src/game/feature.ts', 'utf8');
 
-                    async function mistralWithRetry(params) {
-                        const delays = [2000, 15000, 62000];
-                        for (let i = 0; ; i++) {
-                            try {
-                                return await client.agents.complete(params);
-                            } catch (err) {
-                                const is429 = err.statusCode === 429 || err.message?.includes('429');
-                                if (!is429 || i >= delays.length) throw err;
-                                console.warn(`⏳ Rate limited. Retrying in ${delays[i] / 1000}s...`);
-                                await new Promise(r => setTimeout(r, delays[i]));
-                            }
-                        }
-                    }
 
                     // Runs the agent, handling read_file tool calls, until it produces a text response.
                     async function runUntilCode(messages) {
@@ -142,7 +143,11 @@ export function implementPlugin() {
                                     if (attempt === MAX_RETRIES) {
                                         res.statusCode = 422;
                                         res.setHeader('Content-Type', 'application/json');
-                                        res.end(JSON.stringify({ok: false, error: 'TypeScript validation failed', details: featureErrors}));
+                                        res.end(JSON.stringify({
+                                            ok: false,
+                                            error: 'TypeScript validation failed',
+                                            details: featureErrors
+                                        }));
                                         console.error(`Could not make the feature work in ${MAX_RETRIES + 1} attempts.`);
                                         return;
                                     }
@@ -166,6 +171,44 @@ export function implementPlugin() {
                     } finally {
                         server.watcher.add(absoluteFeaturePath);
                     }
+                } catch (err) {
+                    console.error('❌ Plugin error:', err.message || 'Unknown error');
+                    res.statusCode = 500;
+                    res.end(JSON.stringify({ok: false, error: err.message}));
+                }
+            });
+
+            server.middlewares.use('/api/analyze', async (req, res) => {
+                if (req.method !== 'POST') {
+                    res.statusCode = 405;
+                    res.end();
+                    return;
+                }
+
+                try {
+                    const body = await new Promise((resolve) => {
+                        let data = '';
+                        req.on('data', chunk => data += chunk);
+                        req.on('end', () => resolve(data));
+                    });
+
+                    console.log("[ANALYZE] Sending profile...");
+                    const messages = [{
+                        role: 'user',
+                        content: body
+                    }];
+                    const analyzeRes = await mistralWithRetry({
+                        agentId: env.VITE_AD_AGENT_ID,
+                        messages,
+                        responseFormat: {type: "json_object"},
+                    });
+
+                    const raw = analyzeRes.choices[0].message.content;
+                    const cards = JSON.parse(raw);
+                    console.log("[ANALYZE] Done.");
+
+                    res.setHeader('Content-Type', 'application/json');
+                    res.end(JSON.stringify({"cards": cards}));
                 } catch (err) {
                     console.error('❌ Plugin error:', err.message || 'Unknown error');
                     res.statusCode = 500;

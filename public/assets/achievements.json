@@ -3,5 +3,30 @@
     "id": "talk_to_villager",
     "label": "Talk to one villager",
     "condition": "npcsTalkedToMin1"
+  },
+  {
+    "id": "harvest_5_crops",
+    "label": "Harvest 5 crops",
+    "condition": "harvest5Crops"
+  },
+  {
+    "id": "harvest_5_of_each_type",
+    "label": "Harvest 5 crops of each type",
+    "condition": "harvest5OfEachType"
+  },
+  {
+    "id": "earn_100_gold",
+    "label": "Earn 100 gold",
+    "condition": "earn100Gold"
+  },
+  {
+    "id": "talk_to_all_villagers",
+    "label": "Talk to every villager",
+    "condition": "talkToAllVillagers"
+  },
+  {
+    "id": "earn_1000_gold",
+    "label": "Earn 1000 gold",
+    "condition": "earn1000Gold"
   }
 ]

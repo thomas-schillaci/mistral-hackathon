@@ -1,30 +1,30 @@
 import {Scene} from "phaser";
 import {TEXT_STYLE} from "./styles";
 
-type DialogueOption = { label: string; next: number | null };
-type DialogueLine = { text: string; options: DialogueOption[] };
-type ConversationTurn = { npcText: string; playerChoice: string; timestamp: number };
-type ConversationRecord = { npc: string; turns: ConversationTurn[]; startedAt: number };
+export type DialogueOption = { label: string; next?: number | null; action?: string };
+export type DialogueLine = { text: string; options?: DialogueOption[] };
+type ConversationTurn = { npcText: string; playerChoice: string;  };
+type ConversationRecord = { npc: string; turns: ConversationTurn[]; };
 
 export class DialoguePane {
     static readonly REGISTRY_KEY = "conversationOpen";
 
     private static readonly PANEL_X = 80;
-    private static readonly PANEL_Y = 720;
+    private static readonly PANEL_Y = 580;
     private static readonly PANEL_W = 1760;
-    private static readonly PANEL_H = 300;
+    private static readonly PANEL_H = 460;
     private static readonly PORTRAIT_X = 164;
-    private static readonly PORTRAIT_Y = 800;
+    private static readonly PORTRAIT_Y = 660;
     private static readonly PORTRAIT_SCALE = 4;
     private static readonly CONTENT_X = 320;
-    private static readonly NAME_Y = 736;
-    private static readonly BODY_Y = 800;
-    private static readonly OPTIONS_START_Y = 890;
+    private static readonly NAME_Y = 596;
+    private static readonly BODY_Y = 660;
+    private static readonly OPTIONS_START_Y = 880;
     private static readonly OPTION_GAP = 44;
     private static readonly TEXT_SCALE = 2;
     private static readonly NAME_SCALE = 3;
     private static readonly DEPTH = 200000;
-    private static readonly MAX_OPTIONS = 2;
+    private static readonly MAX_OPTIONS = 3;
 
     private readonly scene: Scene;
     private readonly panelBg: Phaser.GameObjects.Graphics;
@@ -41,13 +41,14 @@ export class DialoguePane {
     private readonly sKey: Phaser.Input.Keyboard.Key;
     private readonly enterKey: Phaser.Input.Keyboard.Key;
     private readonly spaceKey: Phaser.Input.Keyboard.Key;
-    private readonly eKey: Phaser.Input.Keyboard.Key;
     private readonly escKey: Phaser.Input.Keyboard.Key;
 
     private script: DialogueLine[] = [];
     private currentLineIndex = 0;
     private selectedOptionIndex = 0;
     private visible = false;
+    private isTerminalLine = false;
+    private justEnteredTerminalLine = false;
     private currentConversation: ConversationRecord | null = null;
 
     constructor(scene: Scene) {
@@ -110,9 +111,9 @@ export class DialoguePane {
         this.sKey = scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.enterKey = scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
         this.spaceKey = scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.eKey = scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         this.escKey = scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
+        scene.input.on("pointerdown", this.onSceneClick, this);
         scene.registry.events.on(
             `changedata-${DialoguePane.REGISTRY_KEY}`,
             this.onRegistryChanged,
@@ -126,6 +127,17 @@ export class DialoguePane {
     update(): void {
         if (!this.visible) return;
 
+        if (this.isTerminalLine) {
+            if (
+                Phaser.Input.Keyboard.JustDown(this.enterKey) ||
+                Phaser.Input.Keyboard.JustDown(this.spaceKey) ||
+                Phaser.Input.Keyboard.JustDown(this.escKey)
+            ) {
+                this.closeAndSave();
+            }
+            return;
+        }
+
         const optionCount = this.script[this.currentLineIndex].options.length;
 
         if (Phaser.Input.Keyboard.JustDown(this.upKey) || Phaser.Input.Keyboard.JustDown(this.zKey) || Phaser.Input.Keyboard.JustDown(this.wKey)) {
@@ -134,7 +146,7 @@ export class DialoguePane {
         if (Phaser.Input.Keyboard.JustDown(this.downKey) || Phaser.Input.Keyboard.JustDown(this.sKey)) {
             this.selectOption((this.selectedOptionIndex + 1) % optionCount);
         }
-        if (Phaser.Input.Keyboard.JustDown(this.enterKey) || Phaser.Input.Keyboard.JustDown(this.spaceKey) || Phaser.Input.Keyboard.JustDown(this.eKey)) {
+        if (Phaser.Input.Keyboard.JustDown(this.enterKey) || Phaser.Input.Keyboard.JustDown(this.spaceKey)) {
             this.confirmOption();
         }
         if (Phaser.Input.Keyboard.JustDown(this.escKey)) {
@@ -150,7 +162,7 @@ export class DialoguePane {
         this.script = this.scene.registry.get("conversationDialogue") as DialogueLine[] ?? [];
         this.currentLineIndex = 0;
         this.selectedOptionIndex = 0;
-        this.currentConversation = { npc: npc?.name ?? "unknown", turns: [], startedAt: Date.now() };
+        this.currentConversation = {npc: npc?.name ?? "unknown", turns: []};
 
         this.drawPanel();
         this.goToLine(0);
@@ -187,14 +199,24 @@ export class DialoguePane {
         const line = this.script[index];
         this.bodyText.setText(line.text);
 
-        line.options.forEach((opt, i) => {
-            this.optionTexts[i].setText(opt.label).setVisible(true);
-        });
-        for (let i = line.options.length; i < DialoguePane.MAX_OPTIONS; i++) {
-            this.optionTexts[i].setVisible(false);
-        }
+        const options = line.options ?? [];
+        this.isTerminalLine = options.length === 0;
 
-        this.refreshOptionVisuals();
+        if (this.isTerminalLine) {
+            this.justEnteredTerminalLine = true;
+            for (let i = 0; i < DialoguePane.MAX_OPTIONS; i++) {
+                this.optionTexts[i].setVisible(false);
+            }
+            this.optionHighlight.setVisible(false);
+        } else {
+            options.forEach((opt, i) => {
+                this.optionTexts[i].setText(opt.label).setVisible(true);
+            });
+            for (let i = options.length; i < DialoguePane.MAX_OPTIONS; i++) {
+                this.optionTexts[i].setVisible(false);
+            }
+            this.refreshOptionVisuals();
+        }
     }
 
     private selectOption(index: number): void {
@@ -208,12 +230,14 @@ export class DialoguePane {
 
         this.currentConversation?.turns.push({
             npcText: line.text,
-            playerChoice: option.label,
-            timestamp: Date.now(),
+            playerChoice: option.label
         });
 
-        if (option.next === null) {
+        if (option.next == null) {
             this.scene.registry.set(DialoguePane.REGISTRY_KEY, false);
+            if (option.action) {
+                this.scene.registry.set("dialoguePendingAction", option.action);
+            }
         } else {
             this.goToLine(option.next);
         }
@@ -258,12 +282,32 @@ export class DialoguePane {
         this.optionTexts.forEach(t => t.setVisible(visible));
     }
 
+    private onSceneClick(): void {
+        if (this.visible && this.isTerminalLine) {
+            if (this.justEnteredTerminalLine) {
+                this.justEnteredTerminalLine = false;
+                return;
+            }
+            this.closeAndSave();
+        }
+    }
+
+    private closeAndSave(): void {
+        const line = this.script[this.currentLineIndex];
+        this.currentConversation?.turns.push({
+            npcText: line.text,
+            playerChoice: ""
+        });
+        this.scene.registry.set(DialoguePane.REGISTRY_KEY, false);
+    }
+
     private onRegistryChanged(_parent: unknown, value: boolean): void {
         if (value && !this.visible) this.show();
         else if (!value && this.visible) this.hide();
     }
 
     private destroy(): void {
+        this.scene.input.off("pointerdown", this.onSceneClick, this);
         this.scene.registry.events.off(
             `changedata-${DialoguePane.REGISTRY_KEY}`,
             this.onRegistryChanged,

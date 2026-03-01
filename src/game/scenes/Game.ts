@@ -8,33 +8,50 @@ import {NPC, NpcDefinition} from "../entities/NPC";
 import {PlayerCharacter} from "../entities/PlayerCharacter";
 import {Shopkeeper} from "../entities/Shopkeeper";
 import {UserProfile} from "../UserProfile";
-import {generateCards} from '../../ai/mistral.ts';
 import {preloadAchievements, registerAchievements} from '../systems/AchievementSystem';
 import {feature} from '../feature';
-import {restoreState} from '../GameState';
+import {restoreState, setupHotReloadSave} from '../GameState';
 import type {GameAPI} from '../GameAPI';
 
 const NPCS: NpcDefinition[] = [
     {
-        name: "Luke",
-        textureKey: "luke",
-        basePath: "assets/Characters/Luke",
-        x: 500,
-        y: 500,
-        speed: 2,
-        patrol: [
-            {vx: -1, vy: 0, durationMs: 1000},
-            {vx: 0, vy: -1, durationMs: 1000},
-            {vx: 1, vy: 0, durationMs: 1000},
-            {vx: 0, vy: 1, durationMs: 1000},
-            {vx: 0, vy: 0, durationMs: 1000},
-        ],
+        name: "Thomas",
+        textureKey: "thomas",
+        basePath: "assets/Characters/Alex",
+        x: 50 * 16,
+        y: 24 * 16,
+        speed: 0
     },
+    {
+        name: "Lyria",
+        textureKey: "lyria",
+        basePath: "assets/Characters/Lyria",
+        x: 24 * 16,
+        y: 31 * 16,
+        speed: 0
+    },
+    {
+        name: "Manu",
+        textureKey: "manu",
+        basePath: "assets/Characters/Manu",
+        x: 54 * 16,
+        y: 7 * 16,
+        speed: 0
+    },
+    {
+        name: "Tori",
+        textureKey: "tori",
+        basePath: "assets/Characters/Tori",
+        x: 37 * 16,
+        y: 15 * 16,
+        speed: 0
+    }
 ];
 
 export class Game extends Scene implements GameAPI {
     private tileOutline!: Phaser.GameObjects.Image;
     private baseLayer!: Phaser.Tilemaps.TilemapLayer;
+    private worldLayer!: Phaser.Tilemaps.TilemapLayer;
     private tileWidth = 16;
     private tileHeight = 16;
 
@@ -71,20 +88,30 @@ export class Game extends Scene implements GameAPI {
         Character.preloadSpritesheets(this.load, "player", "assets/Characters/Player");
         NPC.preloadAll(this.load, NPCS);
         Shopkeeper.preload(this.load);
+        this.load.json("alex-dialogue", "assets/dialogue/alex.json");
         feature.onPreload(this);
     }
 
     create() {
-        const {baseLayer, collisionsLayer, tileWidth, tileHeight, worldWidth, worldHeight} = createMap(this);
+        const {
+            baseLayer,
+            worldLayer,
+            collisionsLayer,
+            tileWidth,
+            tileHeight,
+            worldWidth,
+            worldHeight
+        } = createMap(this);
 
         this.baseLayer = baseLayer;
+        this.worldLayer = worldLayer;
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
-        this.player = new PlayerCharacter(this, 500, 500);
+        this.player = new PlayerCharacter(this, 15 * 16, 16 * 8);
 
         // Spawn positions are relative to the map centre; add more entries to NPCS above to add characters.
         this.npcs = NPCS.map(def => new NPC(this, def));
-        this.shopkeeper = new Shopkeeper(this, 600, 500);
+        this.shopkeeper = new Shopkeeper(this, 33*16, 5*16);
 
         this.registry.set("selectedCropType", "strawberry");
         this.registry.set("gold", 0);
@@ -100,6 +127,7 @@ export class Game extends Scene implements GameAPI {
         this.registry.set("totalNpcCount", NPCS.length);
         this.registry.set("cardsOpen", false);
         this.registry.set("pendingCards", []);
+        this.registry.set("dialoguePendingAction", null);
         this.registry.set("unlockedAchievements", [] as string[]);
         this.registry.set("cropGrowthMultiplier", 1);
 
@@ -107,9 +135,16 @@ export class Game extends Scene implements GameAPI {
         if (savedState?.plantedCrops) {
             Crop.restore(this, savedState.plantedCrops);
         }
+        if (savedState?.playerX !== undefined && savedState?.playerY !== undefined) {
+            this.player.sprite.setPosition(savedState.playerX, savedState.playerY);
+        }
 
         this.userProfile = new UserProfile(this);
-        registerAchievements(this);
+        registerAchievements(this, this.onAchievement.bind(this));
+        setupHotReloadSave(this.registry, () => ({
+            playerX: this.player.sprite.x,
+            playerY: this.player.sprite.y,
+        }));
 
         this.registry.events.on("changedata-conversationOpen", (_: unknown, value: boolean) => {
             if (this._settingFromGame) return;
@@ -123,6 +158,15 @@ export class Game extends Scene implements GameAPI {
 
         this.registry.events.on("changedata-gold", (_: unknown, newAmount: number) => {
             feature.onGoldChanged(this, newAmount);
+        });
+
+        this.registry.events.on("changedata-dialoguePendingAction", (_: unknown, action: string | null) => {
+            if (!action) return;
+            this.registry.set("dialoguePendingAction", null);
+            if (action === "openShop") {
+                this.activeShopkeeper = this.shopkeeper;
+                this.setShopOpen(true);
+            }
         });
 
         let prevAchievementCount = (this.registry.get("unlockedAchievements") as string[]).length;
@@ -159,7 +203,7 @@ export class Game extends Scene implements GameAPI {
         this.debugKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.B);
         this.interactKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-            handleTileClick(pointer, this, this.baseLayer, this.player.sprite, this.tileWidth, this.tileHeight, () => this.isConversationOpen);
+            handleTileClick(pointer, this, this.worldLayer, this.player.sprite, this.tileWidth, this.tileHeight, () => this.isConversationOpen);
         });
 
         this.scale.on(Phaser.Scale.Events.RESIZE, () => {
@@ -169,9 +213,29 @@ export class Game extends Scene implements GameAPI {
         feature.onCreate(this);
     }
 
+    onAchievement() {
+        fetch('/api/analyze', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(this.userProfile.toJSON()),
+        }).then(res => {
+            if (!res.ok) {
+                res.json().then(body => console.error('[ANALYZE] Server error:', body)).catch(() => {
+                });
+                console.error(`[ANALYZE] Request failed with status ${res.status}`);
+                return;
+            }
+            res.json().then(body => {
+                const cards = body["cards"];
+                this.registry.set("pendingCards", cards);
+                this.registry.set("cardsOpen", true);
+            });
+        }).catch(err => console.error('[ANALYZE] Network error:', err));
+    }
+
     update(_time: number, delta: number) {
         if (Phaser.Input.Keyboard.JustDown(this.interactKey)) {
-            this.tryToggleConversation();
+            this.tryOpenConversation();
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.debugKey)) {
@@ -197,7 +261,7 @@ export class Game extends Scene implements GameAPI {
     }
 
     addCrops(type: CropType, count: number): void {
-        const counts = { ...(this.registry.get("cropCounts") as Record<CropType, number>) };
+        const counts = {...(this.registry.get("cropCounts") as Record<CropType, number>)};
         counts[type] = (counts[type] ?? 0) + count;
         this.registry.set("cropCounts", counts);
     }
@@ -218,14 +282,10 @@ export class Game extends Scene implements GameAPI {
     }
 
     private debug() {
-        generateCards(this.userProfile.toJSON()).then(cards => {
-            console.log(cards);
-            this.registry.set("pendingCards", cards);
-            this.registry.set("cardsOpen", true);
-        });
+        console.log(this.userProfile.toJSON());
     }
 
-    private tryToggleConversation() {
+    private tryOpenConversation() {
         if (this.isConversationOpen) {
             return;
         }
@@ -257,12 +317,44 @@ export class Game extends Scene implements GameAPI {
         }
 
         if (nearestShopkeeper) {
-            this.activeShopkeeper = nearestShopkeeper;
-            this.setShopOpen(true);
+            this.openShopkeeperPrompt(nearestShopkeeper);
         } else if (nearestNpc) {
             this.activeNpc = nearestNpc;
             this.setConversationOpen(true);
         }
+    }
+
+    private buildShopkeeperScript() {
+        const alexScript = this.cache.json.get("alex-dialogue") as Array<{ text: string; options?: Array<{ label: string; next: number | null }> }>;
+        const shifted = alexScript.map(line => ({
+            ...line,
+            options: line.options?.map(opt => ({
+                ...opt,
+                next: opt.next !== null ? opt.next + 1 : null,
+            })),
+        }));
+        return [
+            {
+                text: "Well, hello there! What can I do for you today?",
+                options: [
+                    { label: "I'd like to see what you've got.", action: "openShop" },
+                    { label: "Just wanted to chat.", next: 1 },
+                ],
+            },
+            ...shifted,
+        ];
+    }
+
+    private openShopkeeperPrompt(shopkeeper: Shopkeeper): void {
+        this.isConversationOpen = true;
+        this.player.setPaused(true);
+        this.activeShopkeeper = shopkeeper;
+        shopkeeper.setPaused(true);
+        this._settingFromGame = true;
+        this.registry.set("conversationNpc", { name: "Alex", textureKey: "shopkeeper" });
+        this.registry.set("conversationDialogue", this.buildShopkeeperScript());
+        this.registry.set("conversationOpen", true);
+        this._settingFromGame = false;
     }
 
     public setConversationOpen(open: boolean) {
@@ -271,6 +363,9 @@ export class Game extends Scene implements GameAPI {
         if (this.activeNpc) {
             this.activeNpc.setPaused(open);
         }
+        if (this.activeShopkeeper) {
+            this.activeShopkeeper.setPaused(open);
+        }
         if (open && this.activeNpc) {
             feature.onNpcTalkStart(this, this.activeNpc.name);
         } else if (!open && this.activeNpc) {
@@ -278,6 +373,7 @@ export class Game extends Scene implements GameAPI {
         }
         if (!open) {
             this.activeNpc = null;
+            this.activeShopkeeper = null;
         }
         // Flag must wrap the registry write because changedata fires synchronously
         // inside registry.set() — the listener would otherwise re-enter this method.

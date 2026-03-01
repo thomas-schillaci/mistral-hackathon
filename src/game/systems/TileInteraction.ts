@@ -2,7 +2,7 @@ import {Crop, CropType} from "../entities/Crop";
 import {feature} from '../feature';
 import type {GameAPI} from '../GameAPI';
 
-const DIRT_TILE_ID = 130;
+const SOIL_TILE_IDS = [3641, 3642, 3714, 3711, 3639, 3712]; // farmable soil tile index in map.scene format
 
 
 function isNearPlayer(
@@ -46,7 +46,7 @@ export function updateTileOutline(
 export function handleTileClick(
     pointer: Phaser.Input.Pointer,
     scene: Phaser.Scene & GameAPI,
-    baseLayer: Phaser.Tilemaps.TilemapLayer,
+    worldLayer: Phaser.Tilemaps.TilemapLayer,
     playerSprite: Phaser.GameObjects.GameObject & { x: number; y: number },
     tileWidth: number,
     tileHeight: number,
@@ -62,8 +62,8 @@ export function handleTileClick(
     const tileX = Math.floor(worldPoint.x / tileWidth);
     const tileY = Math.floor(worldPoint.y / tileHeight);
 
-    const tile = baseLayer.getTileAt(tileX, tileY);
-    if (!tile || tile.index !== DIRT_TILE_ID) return;
+    const tile = worldLayer.getTileAt(tileX, tileY);
+    if (!tile || !SOIL_TILE_IDS.includes(tile.index)) return;
     if (!isNearPlayer(tileX, tileY, playerSprite.x, playerSprite.y, tileWidth, tileHeight)) return;
 
     const crop = Crop.getCrop(tileX, tileY);

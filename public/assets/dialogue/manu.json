@@ -1,0 +1,79 @@
+[
+  {
+    "text": "You’ve been wandering a bit around the village now.\nWhat did you make of it?",
+    "options": [
+      {
+        "label": "It's calm, the farm still fell the best place to be though.",
+        "next": 1
+      },
+      {
+        "label": "The people are interesting and some are hard to read.",
+        "next": 5
+      },
+      {
+        "label": "It's nice but it all looks the same after a while.",
+        "next": 9
+      }
+    ]
+  },
+  {
+    "text": "Calm tends to mean something different for everyone.\nI guess you like the farm because it’s your own space. Any plans for it?",
+    "options": [
+      {
+        "label": "Make it more efficient.",
+        "next": 2
+      },
+      {
+        "label": "Invite people there.",
+        "next": 3
+      },
+      {
+        "label": "I’d expand it.",
+        "next": 4
+      }
+    ]
+  },
+  {"text": "Efficiency first. Having things under control reassures most people."},
+  {"text": "You want them to see it. That's different from just having them over."},
+  {"text": "More space, or more of what's already there?"},
+  {
+    "text": "Hard to read usually means they're not performing anything.\nHard to read, or hard to place? There's a difference",
+    "options": [
+      {
+        "label": "Hard to place. They reminded me of something.",
+        "next": 6
+      },
+      {
+        "label": "Both, maybe. I'm still figuring it out.",
+        "next": 7
+      },
+      {
+        "label": "Hard to read. I couldn't tell what they wanted.",
+        "next": 8
+      }
+    ]
+  },
+  {"text": "That happens here sometimes."},
+  {"text": "You will. It just takes a few conversations."},
+  {"text": "They usually don't want much. That's the thing."},
+  {
+    "text": "Most people say that at first. Then they slow down.\nWhat would make you slow down here?",
+    "options": [
+      {
+        "label": "Having something to tend to. The farm helps with that.",
+        "next": 10
+      },
+      {
+        "label": "A good conversation. One that goes somewhere.",
+        "next": 11
+      },
+      {
+        "label": "Noticing things i haven’t see before.",
+        "next": 12
+      }
+    ]
+  },
+  {"text": "That's usually enough but I understand you’d want something more."},
+  {"text": "Well you're having one right now. Debatable, but still."},
+  {"text": "That might take a bit of time, but you seem to have plenty of it."}
+]

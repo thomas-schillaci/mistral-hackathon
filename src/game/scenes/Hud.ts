@@ -5,6 +5,7 @@ import {DialoguePane} from "../ui/DialoguePane";
 import {ShopPane} from "../ui/ShopPane";
 import {CardPane} from "../ui/CardPane";
 import {AchievementPane, Achievement} from "../ui/AchievementPane";
+import {TutorialPane} from "../ui/TutorialPane";
 
 export class Hud extends Scene {
     private hotbar?: Hotbar;
@@ -13,6 +14,7 @@ export class Hud extends Scene {
     private shopPane?: ShopPane;
     private cardPane?: CardPane;
     private achievementPane?: AchievementPane;
+    private tutorialPane?: TutorialPane;
 
     constructor() {
         super("Hud");
@@ -26,6 +28,7 @@ export class Hud extends Scene {
         this.cardPane = new CardPane(this);
         const achievements = (this.cache.json.get("achievements") ?? []) as Achievement[];
         this.achievementPane = new AchievementPane(this, achievements);
+        this.tutorialPane = new TutorialPane(this);
     }
 
     update(): void {

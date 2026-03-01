@@ -1,0 +1,79 @@
+[
+  {
+    "text": "You came at a good time. What brought you in?",
+    "options": [
+      {
+        "label": "Just looking for now.",
+        "next": 1
+      },
+      {
+        "label": "I was curious about the people here.",
+        "next": 5
+      },
+      {
+        "label": "I want to see what this place actually is.",
+        "next": 9
+      }
+    ]
+  },
+  {
+    "text": "That's fine. Take your time and let me know if you have any questions.\nMost things in here came from somewhere nearby.",
+    "options": [
+      {
+        "label": "I’m not sure of what to do with the farm.",
+        "next": 2
+      },
+      {
+        "label": "I figured I'd see if anyone was around.",
+        "next": 3
+      },
+      {
+        "label": "I just want to see what’s out there.",
+        "next": 4
+      }
+    ]
+  },
+  {"text": "It’s yours, that’s a good place to start, but you’ll figure it out, how do you think I run this shop?"},
+  {"text": "They are. This is usually a good place to cross paths, I’m the only shop so that helps."},
+  {"text": "Then go look. The village is small but it holds more than it shows"},
+  {
+    "text": "They've all been here a while. They're worth talking to.\nPeople here don't ask for much. Is there someone you'd want to understand better?",
+    "options": [
+      {
+        "label": "I think I need to understand myself first.",
+        "next": 6
+      },
+      {
+        "label": "All of them honestly, that’s why I’m here.",
+        "next": 7
+      },
+      {
+        "label": "I’d rather see where they live first.",
+        "next": 8
+      }
+    ]
+  },
+  {"text": "Fair enough. These people will still be around no matter what."},
+  {"text": "Then you'll be busy. Good kind of busy, though."},
+  {"text": "That makes sense. The houses aren't far, go take a look."},
+  {
+    "text": "It's not much, from the outside, but it’s soothing” ; “Anything catch your eye on the way in?",
+    "options": [
+      {
+        "label": "The farm, it felt like it was waiting for me, no one’s taking care of it?",
+        "next": 10
+      },
+      {
+        "label": "I haven't really looked, so I’m not sure.",
+        "next": 11
+      },
+      {
+        "label": "All the time. I like not knowing where I'll end up.",
+        "next": 12
+      }
+    ]
+  },
+  {"text": "It's been sitting there. I suppose that answers your question."},
+  {"text": "Small place doesn't mean empty place, but we’re glad to have one more now."},
+  {"text": "Oh, you will look, there is not much to do here, for now at least."}
+]

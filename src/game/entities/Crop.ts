@@ -15,7 +15,7 @@ export class Crop {
     };
 
     static preloadSpritesheet(loader: Phaser.Loader.LoaderPlugin): void {
-        loader.spritesheet("crops", "assets/Objects/Spring Crops.png", {
+        loader.spritesheet("crops", "assets/Farm Crops/Spring Crops.png", {
             frameWidth: 16,
             frameHeight: 16,
         });

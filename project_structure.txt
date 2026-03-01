@@ -24,25 +24,447 @@ src/game/ui/ShopPane.ts
 src/game/ui/styles.ts
 
 ASSETS (paths are relative to public/ — use as-is in scene.load calls):
-assets/Characters/Luke/Idle.png
-assets/Characters/Luke/Walk.png
+assets/Characters/Alex/Axe.png
+assets/Characters/Alex/Bow and Arrow.png
+assets/Characters/Alex/Catching Insect.png
+assets/Characters/Alex/Climbing .png
+assets/Characters/Alex/Damage.png
+assets/Characters/Alex/Dead.png
+assets/Characters/Alex/Hoe.png
+assets/Characters/Alex/Idle.png
+assets/Characters/Alex/Petting.png
+assets/Characters/Alex/Pickaxe.png
+assets/Characters/Alex/Run.png
+assets/Characters/Alex/Shovel.png
+assets/Characters/Alex/Sickle.png
+assets/Characters/Alex/Sitting .png
+assets/Characters/Alex/Sleep.png
+assets/Characters/Alex/Sword.png
+assets/Characters/Alex/Throwing items.png
+assets/Characters/Alex/Walk.png
+assets/Characters/Alex/Watering.png
+assets/Characters/Josh/Axe.png
+assets/Characters/Josh/Bow and Arrow.png
+assets/Characters/Josh/Catching Insect.png
+assets/Characters/Josh/Climbing.png
+assets/Characters/Josh/Damage.png
+assets/Characters/Josh/Dead.png
+assets/Characters/Josh/Hoe.png
+assets/Characters/Josh/Idle.png
+assets/Characters/Josh/Petting.png
+assets/Characters/Josh/Pickaxe.png
+assets/Characters/Josh/Run.png
+assets/Characters/Josh/Shovel.png
+assets/Characters/Josh/Sickle.png
+assets/Characters/Josh/Sitting.png
+assets/Characters/Josh/Sleep.png
+assets/Characters/Josh/Sword.png
+assets/Characters/Josh/Throwing items.png
+assets/Characters/Josh/Walk.png
+assets/Characters/Josh/Watering.png
+assets/Characters/Lyria/Axe.png
+assets/Characters/Lyria/Bow and Arrow.png
+assets/Characters/Lyria/Catching Insect.png
+assets/Characters/Lyria/Climbing.png
+assets/Characters/Lyria/Hoe.png
+assets/Characters/Lyria/Idle.png
+assets/Characters/Lyria/Petting.png
+assets/Characters/Lyria/Pickaxe.png
+assets/Characters/Lyria/Run.png
+assets/Characters/Lyria/Shovel.png
+assets/Characters/Lyria/Sickle.png
+assets/Characters/Lyria/Sitting .png
+assets/Characters/Lyria/Throwing items.png
+assets/Characters/Lyria/Walk.png
+assets/Characters/Lyria/damage.png
+assets/Characters/Lyria/dead.png
+assets/Characters/Lyria/sleep.png
+assets/Characters/Lyria/sword.png
+assets/Characters/Lyria/watering.png
+assets/Characters/Manu/Axe.png
+assets/Characters/Manu/Bow and Arrow.png
+assets/Characters/Manu/Catching Insect.png
+assets/Characters/Manu/Climbing.png
+assets/Characters/Manu/Damage.png
+assets/Characters/Manu/Dead.png
+assets/Characters/Manu/Hoe.png
+assets/Characters/Manu/Idle.png
+assets/Characters/Manu/Petting.png
+assets/Characters/Manu/Pickaxe.png
+assets/Characters/Manu/Run.png
+assets/Characters/Manu/Shovel.png
+assets/Characters/Manu/Sickle.png
+assets/Characters/Manu/Sitting.png
+assets/Characters/Manu/Sleep.png
+assets/Characters/Manu/Sword.png
+assets/Characters/Manu/Throwing items.png
+assets/Characters/Manu/Walk.png
+assets/Characters/Manu/Watering.png
 assets/Characters/Player/Idle.png
 assets/Characters/Player/Walk.png
 assets/Characters/ShopKeeper/Idle.png
-assets/Farm Animals/Baby Chicken Yellow.png
-assets/Farm Animals/Chicken Blonde  Green.png
-assets/Farm Animals/Chicken Red.png
-assets/Farm Animals/Female Cow Brown.png
-assets/Farm Animals/Male Cow Brown.png
-assets/Objects/Fence's copiar.png
-assets/Objects/House.png
-assets/Objects/Interior.png
-assets/Objects/Maple Tree.png
-assets/Objects/Road copiar.png
-assets/Objects/Spring Crops.png
-assets/Objects/chest.png
-assets/Tileset/Tileset Spring.png
+assets/Characters/Tori/Axe.png
+assets/Characters/Tori/Bow and Arrow.png
+assets/Characters/Tori/Catching Insect.png
+assets/Characters/Tori/Climbing.png
+assets/Characters/Tori/Damage.png
+assets/Characters/Tori/Dead.png
+assets/Characters/Tori/Hoe.png
+assets/Characters/Tori/Idle.png
+assets/Characters/Tori/Petting.png
+assets/Characters/Tori/Pickaxe.png
+assets/Characters/Tori/Run.png
+assets/Characters/Tori/Shovel.png
+assets/Characters/Tori/Sickle.png
+assets/Characters/Tori/Sitting.png
+assets/Characters/Tori/Sleep.png
+assets/Characters/Tori/Sword.png
+assets/Characters/Tori/Throwing items.png
+assets/Characters/Tori/Walk.png
+assets/Characters/Tori/Watering.png
+assets/Exterior/Altar.png
+assets/Exterior/Beach/Beach Exterior.png
+assets/Exterior/Beach/Beach Plates.png
+assets/Exterior/Beach/Coconut Tree.png
+assets/Exterior/Beach/Exterior Beach.png
+assets/Exterior/Beach/Fish.png
+assets/Exterior/Beach/Tent.png
+assets/Exterior/Beach/Wood Boat.png
+assets/Exterior/Beach/wood canoe.png
+assets/Exterior/Box.png
+assets/Exterior/Bus.png
+assets/Exterior/Construction area.png
+assets/Exterior/Cotton candy cart.png
+assets/Exterior/Deep Forest/Bridge.png
+assets/Exterior/Deep Forest/Root portal.png
+assets/Exterior/Dungeon/Door.png
+assets/Exterior/Dungeon/statue.png
+assets/Exterior/Exterior.png
+assets/Exterior/Fence and Bridge/Bridge Beach.png
+assets/Exterior/Fence and Bridge/Bridge.png
+assets/Exterior/Fence and Bridge/Fence Iron.png
+assets/Exterior/Fence and Bridge/Fence Stone.png
+assets/Exterior/Fence and Bridge/Fence Wood.png
+assets/Exterior/Fence and Bridge/White Fence.png
+assets/Exterior/Halloween Content.png
+assets/Exterior/Houses/1.png
+assets/Exterior/Houses/2.png
+assets/Exterior/Houses/3.png
+assets/Exterior/Houses/4.png
+assets/Exterior/Houses/5.png
+assets/Exterior/Houses/6.png
+assets/Exterior/Houses/7.png
+assets/Exterior/Houses/8.png
+assets/Exterior/Houses/Door, windows, and chimney.png
+assets/Exterior/Houses/Farm Buildings/Barn/Barn.png
+assets/Exterior/Houses/Farm Buildings/Barn/Big Barn.png
+assets/Exterior/Houses/Farm Buildings/Barn/Deluxe Barn.png
+assets/Exterior/Houses/Farm Buildings/Barn/Door, windows.png
+assets/Exterior/Houses/Farm Buildings/Barn objects.png
+assets/Exterior/Houses/Farm Buildings/Chicken Coop/Big Chicken Coop.png
+assets/Exterior/Houses/Farm Buildings/Chicken Coop/Chicken Coop.png
+assets/Exterior/Houses/Farm Buildings/Chicken Coop/Deluxe Chicken Coop.png
+assets/Exterior/Houses/Farm Buildings/Chicken Coop/Door, windows.png
+assets/Exterior/Houses/Farm Buildings/Greenhouse/Big Greenhouse.png
+assets/Exterior/Houses/Farm Buildings/Greenhouse/Deluxe Greenhouse.png
+assets/Exterior/Houses/Farm Buildings/Greenhouse/Greenhouse.png
+assets/Exterior/Houses/Farm Buildings/Mill/1.png
+assets/Exterior/Houses/Farm Buildings/Mill/2.png
+assets/Exterior/Houses/Farm Buildings/Mill/Big Mill.png
+assets/Exterior/Houses/Farm Buildings/Mill/Deluxe Mill.png
+assets/Exterior/Houses/Farm Buildings/Mill/Mill.png
+assets/Exterior/Houses/Farm Buildings/Old/Barn Options.png
+assets/Exterior/Houses/Farm Buildings/Old/Mill.png
+assets/Exterior/Houses/Farm Buildings/Silo/Big Silo.png
+assets/Exterior/Houses/Farm Buildings/Silo/Deluxe Silo.png
+assets/Exterior/Houses/Farm Buildings/Silo/Silo.png
+assets/Exterior/Houses/Farm Buildings/Stable/Big Stable.png
+assets/Exterior/Houses/Farm Buildings/Stable/Deluxe Stable.png
+assets/Exterior/Houses/Farm Buildings/Stable/Others.png
+assets/Exterior/Houses/Farm Buildings/Stable/Stable.png
+assets/Exterior/Houses/NPCS houses/1.png
+assets/Exterior/Houses/NPCS houses/2.png
+assets/Exterior/Houses/NPCS houses/3.png
+assets/Exterior/Houses/NPCS houses/Base houses.png
+assets/Exterior/Houses/NPCS houses/Blacksmith.png
+assets/Exterior/Houses/NPCS houses/Fishman.png
+assets/Exterior/Houses/NPCS houses/Houses.png
+assets/Exterior/Houses/NPCS houses/School.png
+assets/Exterior/Houses/NPCS houses/temple.png
+assets/Exterior/Houses/NPCS houses/trailer.png
+assets/Exterior/Houses/NPCS houses/train station.png
+assets/Exterior/Houses/NPCS houses/wizard's house.png
+assets/Exterior/Houses/Tiny House.png
+assets/Exterior/Houses/Upgrade House.png
+assets/Exterior/Houses/dog house.png
+assets/Exterior/Lamp .png
+assets/Exterior/Moai.png
+assets/Exterior/Newsstand.png
+assets/Exterior/Picnic.png
+assets/Exterior/Plates.png
+assets/Exterior/Playground.png
+assets/Exterior/Popcorn .png
+assets/Exterior/Road city.png
+assets/Exterior/Road.png
+assets/Exterior/Scarescrow.png
+assets/Exterior/Snowman.png
+assets/Exterior/Table.png
+assets/Exterior/Telephone.png
+assets/Exterior/Train.png
+assets/Exterior/Water fountain.png
+assets/Exterior/Well .png
+assets/Exterior/animal plates.png
+assets/Exterior/bonfire Fish.png
+assets/Exterior/bonfire.png
+assets/Exterior/chest.png
+assets/Exterior/dog bathtub.png
+assets/Exterior/ice cream car.png
+assets/Exterior/ice cream cart.png
+assets/Exterior/playground 1.png
+assets/Exterior/shipping box.png
+assets/Exterior/train track.png
+assets/Exterior/water box.png
+assets/Exterior/wood moss.png
+assets/Farm Animals/Chicken/Baby Chicken Black.png
+assets/Farm Animals/Chicken/Baby Chicken Blonde.png
+assets/Farm Animals/Chicken/Baby Chicken Brown.png
+assets/Farm Animals/Chicken/Baby Chicken Evil.png
+assets/Farm Animals/Chicken/Baby Chicken Green.png
+assets/Farm Animals/Chicken/Baby Chicken Pink.png
+assets/Farm Animals/Chicken/Baby Chicken Red.png
+assets/Farm Animals/Chicken/Baby Chicken Universe.png
+assets/Farm Animals/Chicken/Baby Chicken White.png
+assets/Farm Animals/Chicken/Baby Chicken Yellow.png
+assets/Farm Animals/Chicken/Chicken Black White.png
+assets/Farm Animals/Chicken/Chicken Black.png
+assets/Farm Animals/Chicken/Chicken Blonde  Green.png
+assets/Farm Animals/Chicken/Chicken Blonde.png
+assets/Farm Animals/Chicken/Chicken Brown Black.png
+assets/Farm Animals/Chicken/Chicken Brown White.png
+assets/Farm Animals/Chicken/Chicken Evil.png
+assets/Farm Animals/Chicken/Chicken Full.png
+assets/Farm Animals/Chicken/Chicken Green.png
+assets/Farm Animals/Chicken/Chicken Pink.png
+assets/Farm Animals/Chicken/Chicken Red.png
+assets/Farm Animals/Chicken/Chicken Universe.png
+assets/Farm Animals/Chicken/Chicken White.png
+assets/Farm Animals/Cow/Common Cow/Baby Cow Black.png
+assets/Farm Animals/Cow/Common Cow/Baby Cow Blonde.png
+assets/Farm Animals/Cow/Common Cow/Baby Cow Brown.png
+assets/Farm Animals/Cow/Common Cow/Baby Cow Pink.png
+assets/Farm Animals/Cow/Common Cow/Female Cow Black.png
+assets/Farm Animals/Cow/Common Cow/Female Cow Blonde.png
+assets/Farm Animals/Cow/Common Cow/Female Cow Brown.png
+assets/Farm Animals/Cow/Common Cow/Female Cow Pink.png
+assets/Farm Animals/Cow/Common Cow/Male Cow Black.png
+assets/Farm Animals/Cow/Common Cow/Male Cow Blonde.png
+assets/Farm Animals/Cow/Common Cow/Male Cow Brown.png
+assets/Farm Animals/Cow/Common Cow/Male Cow Pink.png
+assets/Farm Animals/Cow/Highlighter Cow/Baby highlighter Black.png
+assets/Farm Animals/Cow/Highlighter Cow/Baby highlighter Brown.png
+assets/Farm Animals/Cow/Highlighter Cow/Female highlighter Black.png
+assets/Farm Animals/Cow/Highlighter Cow/Female highlighter Brown.png
+assets/Farm Animals/Cow/Highlighter Cow/Male highlighter Black.png
+assets/Farm Animals/Cow/Highlighter Cow/Male highlighter Brown.png
+assets/Farm Animals/Cow/Highlighter Cow/shadow.png
+assets/Farm Animals/Ducks/Baby Duck Black.png
+assets/Farm Animals/Ducks/Baby Duck Brown.png
+assets/Farm Animals/Ducks/Baby Duck Green.png
+assets/Farm Animals/Ducks/Baby Duck Pink.png
+assets/Farm Animals/Ducks/Baby Duck White.png
+assets/Farm Animals/Ducks/Baby Duck Yellow.png
+assets/Farm Animals/Ducks/Duck Full Black.png
+assets/Farm Animals/Ducks/Duck Full Yellow.png
+assets/Farm Animals/Ducks/Duck Mallad 2.png
+assets/Farm Animals/Ducks/Duck Mallad Female.png
+assets/Farm Animals/Ducks/Duck Mallad.png
+assets/Farm Animals/Ducks/Duck White 2.png
+assets/Farm Animals/Ducks/Duck White.png
+assets/Farm Animals/Goat/Goat Baby Black.png
+assets/Farm Animals/Goat/Goat Baby Blonde.png
+assets/Farm Animals/Goat/Goat Baby Brown.png
+assets/Farm Animals/Goat/Goat Baby Pink.png
+assets/Farm Animals/Goat/Goat Female Black.png
+assets/Farm Animals/Goat/Goat Female Blonde.png
+assets/Farm Animals/Goat/Goat Female Brown.png
+assets/Farm Animals/Goat/Goat Female Pink.png
+assets/Farm Animals/Goat/Goat Male Black.png
+assets/Farm Animals/Goat/Goat Male Blonde.png
+assets/Farm Animals/Goat/Goat Male Brown.png
+assets/Farm Animals/Goat/Goat Male Pink.png
+assets/Farm Animals/Horse/1/Eat carrot.png
+assets/Farm Animals/Horse/1/Eat.png
+assets/Farm Animals/Horse/1/Run.png
+assets/Farm Animals/Horse/1/Sleep.png
+assets/Farm Animals/Horse/1/eat grass.png
+assets/Farm Animals/Horse/1/getting ready to eat.png
+assets/Farm Animals/Horse/1/idle.png
+assets/Farm Animals/Horse/2/Eat carrot.png
+assets/Farm Animals/Horse/2/Eat.png
+assets/Farm Animals/Horse/2/Sleep.png
+assets/Farm Animals/Horse/2/eat grass.png
+assets/Farm Animals/Horse/2/getting ready to eat.png
+assets/Farm Animals/Horse/2/idle.png
+assets/Farm Animals/Horse/2/run.png
+assets/Farm Animals/Horse/3/Eat carrot.png
+assets/Farm Animals/Horse/3/Eat.png
+assets/Farm Animals/Horse/3/Sleep.png
+assets/Farm Animals/Horse/3/eat grass.png
+assets/Farm Animals/Horse/3/getting ready to eat.png
+assets/Farm Animals/Horse/3/idle.png
+assets/Farm Animals/Horse/3/run.png
+assets/Farm Animals/Horse/Saddle/Blue/Sleep.png
+assets/Farm Animals/Horse/Saddle/Blue/eat.png
+assets/Farm Animals/Horse/Saddle/Blue/getting ready to eat.png
+assets/Farm Animals/Horse/Saddle/Blue/idle.png
+assets/Farm Animals/Horse/Saddle/Blue/run.png
+assets/Farm Animals/Horse/Saddle/black/Sleep.png
+assets/Farm Animals/Horse/Saddle/black/eat.png
+assets/Farm Animals/Horse/Saddle/black/getting ready to eat.png
+assets/Farm Animals/Horse/Saddle/black/idle.png
+assets/Farm Animals/Horse/Saddle/black/run.png
+assets/Farm Animals/Horse/Saddle/brown/Sleep.png
+assets/Farm Animals/Horse/Saddle/brown/eat.png
+assets/Farm Animals/Horse/Saddle/brown/getting ready to eat.png
+assets/Farm Animals/Horse/Saddle/brown/idle.png
+assets/Farm Animals/Horse/Saddle/brown/run.png
+assets/Farm Animals/Horse/Saddle/pink/Sleep.png
+assets/Farm Animals/Horse/Saddle/pink/eat.png
+assets/Farm Animals/Horse/Saddle/pink/getting ready to eat.png
+assets/Farm Animals/Horse/Saddle/pink/idle.png
+assets/Farm Animals/Horse/Saddle/pink/run.png
+assets/Farm Animals/Horse/Saddle/pupple/Sleep.png
+assets/Farm Animals/Horse/Saddle/pupple/eat.png
+assets/Farm Animals/Horse/Saddle/pupple/getting ready to eat.png
+assets/Farm Animals/Horse/Saddle/pupple/idle.png
+assets/Farm Animals/Horse/Saddle/pupple/run.png
+assets/Farm Animals/Ostrich/Ostrich Baby Black.png
+assets/Farm Animals/Ostrich/Ostrich Baby Blue.png
+assets/Farm Animals/Ostrich/Ostrich Baby Brown.png
+assets/Farm Animals/Ostrich/Ostrich Black.png
+assets/Farm Animals/Ostrich/Ostrich Blue.png
+assets/Farm Animals/Ostrich/Ostrich Brown.png
+assets/Farm Animals/Pig/Baby Pig Mud Pink.png
+assets/Farm Animals/Pig/Baby Pig Pink.png
+assets/Farm Animals/Pig/Pig Mud Pink.png
+assets/Farm Animals/Pig/Pig Pink.png
+assets/Farm Animals/Sheep/Baby Sheep .png
+assets/Farm Animals/Sheep/Sheep Female 2.png
+assets/Farm Animals/Sheep/Sheep Female.png
+assets/Farm Animals/Sheep/Sheep Male 2.png
+assets/Farm Animals/Sheep/Sheep Male.png
+assets/Farm Crops/Asparagus.png
+assets/Farm Crops/Broccoli.png
+assets/Farm Crops/Cabbage.png
+assets/Farm Crops/Carrot.png
+assets/Farm Crops/Cauliflower.png
+assets/Farm Crops/Fruits Tree/Fall/Apple Tree - no shadow.png
+assets/Farm Crops/Fruits Tree/Fall/Apple Tree.png
+assets/Farm Crops/Fruits Tree/Fall/Icons.png
+assets/Farm Crops/Fruits Tree/Spring/Apricot Tree - no shadow.png
+assets/Farm Crops/Fruits Tree/Spring/Apricot Tree.png
+assets/Farm Crops/Fruits Tree/Spring/Cherry Tree - no shadow.png
+assets/Farm Crops/Fruits Tree/Spring/Cherry Tree.png
+assets/Farm Crops/Fruits Tree/Spring/Icons.png
+assets/Farm Crops/Fruits Tree/Summer/Banana Tree - no Shadow.png
+assets/Farm Crops/Fruits Tree/Summer/Banana Tree.png
+assets/Farm Crops/Fruits Tree/Summer/Coconut tree - no Shadow.png
+assets/Farm Crops/Fruits Tree/Summer/Coconut tree.png
+assets/Farm Crops/Fruits Tree/Summer/Icons.png
+assets/Farm Crops/Fruits Tree/Summer/Mango Tree - no shadow.png
+assets/Farm Crops/Fruits Tree/Summer/Mango Tree.png
+assets/Farm Crops/Fruits Tree/Summer/Orange Tree - no shadow.png
+assets/Farm Crops/Fruits Tree/Summer/Orange Tree.png
+assets/Farm Crops/Fruits Tree/Summer/Peach Tree - no shadow.png
+assets/Farm Crops/Fruits Tree/Summer/Peach Tree.png
+assets/Farm Crops/Onion.png
+assets/Farm Crops/Parsnip.png
+assets/Farm Crops/Potato.png
+assets/Farm Crops/Rice.png
+assets/Farm Crops/Spring Crops.png
+assets/Farm Crops/Spring Onion.png
+assets/Farm Crops/Strawberry.png
+assets/Pets/Cats/1/Black.png
+assets/Pets/Cats/1/Brown.png
+assets/Pets/Cats/1/Ginger.png
+assets/Pets/Cats/1/Gray.png
+assets/Pets/Cats/1/Light Brown.png
+assets/Pets/Cats/1/Light Gray.png
+assets/Pets/Cats/1/Pink.png
+assets/Pets/Cats/1/White.png
+assets/Pets/Cats/2/Blue.png
+assets/Pets/Cats/2/Ginger.png
+assets/Pets/Cats/2/Green.png
+assets/Pets/Cats/2/Pink.png
+assets/Pets/Cats/3/1.png
+assets/Pets/Cats/4/1.png
+assets/Pets/Cats/4/2.png
+assets/Pets/Cats/5/1.png
+assets/Pets/Cats/6/1.png
+assets/Pets/Cats/6/2.png
+assets/Pets/Cats/7/1.png
+assets/Pets/Cats/7/2.png
+assets/Pets/Cats/Box.png
+assets/Pets/Dogs/Premade/1/1.png
+assets/Pets/Dogs/Premade/1/2.png
+assets/Pets/Dogs/Premade/1/3.png
+assets/Pets/Dogs/Premade/1/4.png
+assets/Pets/Dogs/Premade/1/5.png
+assets/Pets/Dogs/Premade/1/6.png
+assets/Pets/Dogs/Premade/1/7.png
+assets/Pets/Dogs/Premade/2/1.png
+assets/Pets/Dogs/Premade/3/1.png
+assets/Pets/Dogs/Premade/3/2.png
+assets/Pets/Dogs/Premade/4/1.png
+assets/Pets/Dogs/Premade/4/2.png
+assets/Pets/Dogs/Premade/4/3.png
+assets/Pets/Dogs/Premade/4/4.png
+assets/Pets/Dogs/Premade/4/5.png
+assets/Pets/Dogs/Premade/5/1.png
+assets/Pets/Dogs/Premade/5/2.png
+assets/Pets/Dogs/Premade/5/3.png
+assets/Pets/Dogs/Premade/5/4.png
+assets/Pets/Dogs/Premade/6/1.png
+assets/Pets/Dogs/Premade/6/2.png
+assets/Pets/Dogs/Premade/6/3.png
+assets/Pets/Dogs/Premade/7/1.png
+assets/Pets/Dogs/Premade/8/1.png
+assets/Pets/Dogs/Premade/8/2.png
+assets/Pets/Dogs/Premade/9/1.png
+assets/Pets/Dogs/Premade/9/2.png
+assets/Pets/Dogs/Premade/9/3.png
+assets/Pets/Dogs/Premade/9/4.png
+assets/Pets/Dogs/Premade/9/5.png
+assets/Pets/Dogs/Premade/9/6.png
+assets/UI/0.2.png
+assets/UI/Bars.png
+assets/UI/Clock/Clock.png
+assets/UI/Clock/Extras.png
+assets/UI/Clock/Others/Clock 2.png
+assets/UI/Clock/Others/Clock 3.png
+assets/UI/Clock/Others/clock 4.png
+assets/UI/Clock/Others/clock.png
+assets/UI/Clock/clock hand.png
+assets/UI/Extras.png
+assets/UI/HUD.png
+assets/UI/Inventory/Banner.png
+assets/UI/Inventory/Book.png
+assets/UI/Inventory/Decor.png
+assets/UI/Inventory/Extras.png
+assets/UI/Inventory/Slot Armor.png
+assets/UI/Inventory/Slots.png
+assets/UI/Inventory/inventory.png
+assets/UI/Money.png
+assets/UI/UI music.png
+assets/UI/button.png
+assets/UI/dialogue box.png
 assets/UI/outline.png
+assets/UI/social network logos.png
+assets/UI/speech bubble, emojis, reaction.png
+assets/UI/weather icons.png
 assets/achievements.json
-assets/dialogue/luke.json
-assets/maps/map.tmj
+assets/dialogue/alex.json
+assets/dialogue/lyria.json
+assets/dialogue/manu.json
+assets/dialogue/thomas.json
+assets/dialogue/tori.json

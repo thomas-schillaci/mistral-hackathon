@@ -48,6 +48,8 @@ function getAssetPaths(dir: string, fileList: string[] = []): string[] {
         if (entry.isDirectory()) {
             getAssetPaths(fullPath, fileList);
         } else {
+            if(fullPath.includes("Farm and Tileset")) continue;
+            if(fullPath.includes("maps")) continue;
             // Strip the leading "public/" so paths match what Phaser expects
             fileList.push(fullPath.replace(/^public[\\/]/, ''));
         }

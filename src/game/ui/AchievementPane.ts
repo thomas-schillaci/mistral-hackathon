@@ -9,8 +9,6 @@ export class AchievementPane {
 
     private static readonly HUD_SCALE = 2;
     private static readonly MARGIN = 18;
-    // GoldCounter: y=18, scale=3, (fontSize 16 + padding.y*2=6) * 3 = 66px tall → bottom at 84
-    private static readonly START_Y = 164;
     // Per-row display height at scale 2: (fontSize 16 + padding.y*2=6) * 2 = 44px
     private static readonly ROW_HEIGHT = 44;
     private static readonly ROW_GAP = 4;
@@ -24,35 +22,38 @@ export class AchievementPane {
         this.scene = scene;
         this.achievements = achievements;
 
-        const titleY = AchievementPane.START_Y - AchievementPane.ROW_HEIGHT - AchievementPane.ROW_GAP;
         this.title = scene.add
-            .text(0, titleY, "Achievements", {
+            .text(0, 0, "Achievements", {
                 ...TEXT_STYLE,
                 color: "#ffffff",
                 backgroundColor: "#1f1f1ff2",
                 padding: { x: 4, y: 3 },
             })
-            .setOrigin(1, 0)
+            .setOrigin(0, 0)
             .setScrollFactor(0)
             .setScale(AchievementPane.HUD_SCALE)
             .setDepth(100001);
 
-        this.rows = achievements.map((achievement, i) => {
-            const y = AchievementPane.START_Y + i * (AchievementPane.ROW_HEIGHT + AchievementPane.ROW_GAP);
+        this.rows = achievements.map((achievement) => {
             return scene.add
-                .text(0, y, `[ ] ${achievement.label}`, {
+                .text(0, 0, `${achievement.label} [ ]`, {
                     ...TEXT_STYLE,
                     color: "#aaaaaa",
                     backgroundColor: "#1f1f1ff2",
                     padding: { x: 4, y: 3 },
                 })
-                .setOrigin(1, 0)
+                .setOrigin(0, 0)
                 .setScrollFactor(0)
                 .setScale(AchievementPane.HUD_SCALE)
                 .setDepth(100001);
         });
 
         this.layout();
+
+        const alreadyUnlocked = scene.registry.get(AchievementPane.REGISTRY_KEY) as string[] ?? [];
+        if (alreadyUnlocked.length > 0) {
+            this.onUnlockedChanged(null, alreadyUnlocked);
+        }
 
         scene.registry.events.on(`changedata-${AchievementPane.REGISTRY_KEY}`, this.onUnlockedChanged, this);
         scene.scale.on(Phaser.Scale.Events.RESIZE, this.layout, this);
@@ -63,15 +64,22 @@ export class AchievementPane {
         this.achievements.forEach((achievement, i) => {
             const done = unlocked.includes(achievement.id);
             this.rows[i]
-                .setText(`${done ? "[x]" : "[ ]"} ${achievement.label}`)
+                .setText(`${achievement.label} ${done ? "[x]" : "[ ]"}`)
                 .setStyle({ color: done ? "#88dd88" : "#aaaaaa" });
         });
     }
 
     private layout(): void {
-        const x = this.scene.scale.width - AchievementPane.MARGIN;
-        this.title.setX(x);
-        this.rows.forEach(row => row.setX(x));
+        const { MARGIN, ROW_HEIGHT, ROW_GAP } = AchievementPane;
+        const n = this.achievements.length;
+        const totalHeight = (n + 1) * ROW_HEIGHT + n * ROW_GAP;
+        const startY = this.scene.scale.height - MARGIN - totalHeight;
+        const x = MARGIN;
+
+        this.title.setPosition(x, startY);
+        this.rows.forEach((row, i) => {
+            row.setPosition(x, startY + (i + 1) * (ROW_HEIGHT + ROW_GAP));
+        });
     }
 
     private destroy(): void {

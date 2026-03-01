@@ -1,0 +1,79 @@
+[
+  {
+    "text": "Hey! Just in time for my break. Every day I'm doing the same routine, taking care of this lovely little town. When you're somewhere new, what's the first thing you do?",
+    "options": [
+      {
+        "label": "I find a spot and stay there for a bit. Get a feel for the place.",
+        "next": 1
+      },
+      {
+        "label": "I look for someone who seems to know how things work.",
+        "next": 5
+      },
+      {
+        "label": "I walk around until I've seen everything.",
+        "next": 9
+      }
+    ]
+  },
+  {
+    "text": "I do the same thing every morning. Fix what needs fixing, check what's changed overnight. I’m trying to do everything smoothly, so my friends don't notice these little changes.\nDoes anything ever change where you come from, without you noticing?",
+    "options": [
+      {
+        "label": "Yes. I usually notice it too late.",
+        "next": 2
+      },
+      {
+        "label": "Sometimes. Usually when someone points it out.",
+        "next": 3
+      },
+      {
+        "label": "All the time. Places change faster than you expect.",
+        "next": 4
+      }
+    ]
+  },
+  {"text": "Late is still noticing."},
+  {"text": "I’m that guy, I notice for my friend. I don't always say anything though. That's what people are for, I think, you can’t remember everything."},
+  {"text": "They do. That's why you have to keep up with them, and remember for others too."},
+  {
+    "text": "I've been doing this since before I can remember starting.\nIs there something you do without knowing why you started?",
+    "options": [
+      {
+        "label": "Yes. A morning thing, mostly. Can't skip it or the day feels wrong.",
+        "next": 6
+      },
+      {
+        "label": "A few things. I picked them up from people around me.",
+        "next": 7
+      },
+      {
+        "label": "Not really. I need a reason for things.",
+        "next": 8
+      }
+    ]
+  },
+  {"text": "Exactly that. The day needs its shape. Nothing could take my small habits away."},
+  {"text": "My friend how are you supposed to start otherwise?"},
+  {"text": "That must be tiring. But you must have your reasons to need a reason, I won’t judge."},
+  {
+    "text": "I did enough walking around with no purpose, and I would never go anywhere else. I’m too useful here, and I don’t need any other plans.\nDid that happen to you before, ending up somewhere you didn't plan?",
+    "options": [
+      {
+        "label": "No I like staying in control.",
+        "next": 10
+      },
+      {
+        "label": "Yes, usually because someone pulled me somewhere.",
+        "next": 11
+      },
+      {
+        "label": "All the time. I like not knowing where I'll end up.",
+        "next": 12
+      }
+    ]
+  },
+  {"text": "It’s easier this way, people say you don’t discover anything by thinking like this, but they don’t think to enjoy the things they already have, and I end up being the one that takes care of it."},
+  {"text": "I would be scared, I don’t think I’d follow anyone, life’s good here."},
+  {"text": "So I guess ending up here was not your plan? Hope you’ll enjoy it anyway."}
+]
