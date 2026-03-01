@@ -1,6 +1,7 @@
 import {Scene} from "phaser";
 
 export type CropType = "strawberry" | "leek" | "potato" | "onion";
+export type CropState = { tileX: number; tileY: number; type: CropType; growthStage: number };
 
 export class Crop {
     private static readonly STAGES_PER_CROP = 6;
@@ -35,6 +36,23 @@ export class Crop {
 
     static getCrop(tileX: number, tileY: number): Crop | undefined {
         return Crop.crops.get(Crop.getTileKey(tileX, tileY));
+    }
+
+    static serialize(): CropState[] {
+        return Array.from(Crop.crops.values()).map(c => ({
+            tileX: c.tileX,
+            tileY: c.tileY,
+            type: c.type,
+            growthStage: c.growthStage,
+        }));
+    }
+
+    static restore(scene: Scene, crops: CropState[]): void {
+        for (const { tileX, tileY, type, growthStage } of crops) {
+            const crop = new Crop(scene, tileX, tileY, type);
+            crop.setGrowthStage(growthStage);
+            Crop.crops.set(Crop.getTileKey(tileX, tileY), crop);
+        }
     }
 
     static updateAll(delta: number): void {

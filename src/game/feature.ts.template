@@ -1,0 +1,23 @@
+import Phaser from 'phaser';
+
+/**
+ * FEATURE CONTRACT
+ * scene: The current Phaser.Scene
+ * systems: A global registry of game systems (CropManager, Weather, etc.)
+ */
+export const feature = {
+    // Called every frame
+    onUpdate: (scene: Phaser.Scene, delta: number) => {
+        // AI logic here
+    },
+
+    // Triggered when an NPC interaction starts
+    onNpcTalkStart: (scene: Phaser.Scene, npcId: string) => {
+        // AI logic here
+    },
+
+    // Triggered when any dialogue ends
+    onConversationEnd: (scene: Phaser.Scene, npcId: string) => {
+        // AI logic here
+    }
+};

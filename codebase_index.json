@@ -1,0 +1,127 @@
+{
+  "src/game/GameState.ts": {
+    "summary": "```markdown\n- **Responsibility**: Manages the serialization and deserialization of game state (e.g., player progress, crops, achievements) to/from browser session storage.\n\n- **Exports**:\n  - `saveState(registry: Phaser.Data.DataManager)`: Persists game state to `sessionStorage`.\n  - `restoreState(registry: Phaser.Data.DataManager)`: Loads and applies saved state from `sessionStorage`.\n\n- **Dependencies**:\n  - `@/game/entities/Crop` (for `Crop` and `CropState` types).\n  - **External**: `Phaser.Data.DataManager` (from Phaser 3).\n```",
+    "hash": "777b77398246570cde9e48f6080a3bfa",
+    "path": "src/game/GameState.ts"
+  },
+  "src/game/UserProfile.ts": {
+    "summary": "```markdown\n- **Responsibility**: Manages the serialization of player progress data (e.g., gold, achievements, dialogue history) into a structured snapshot for saving or analytics.\n\n- **Exports**:\n  - `ProfileSnapshot` (interface): A type defining the structure of saved user data (gold, playtime, NPC interactions, etc.).\n  - `UserProfile` (class): Serializes in-game registry data into a `ProfileSnapshot`.\n\n- **Dependencies**:\n  - External: `phaser` (for `Scene`).\n  - Internal: None (relies on Phaser’s `Scene.registry` for data storage).\n```",
+    "hash": "d711af8578a8b12f8436454ebcf23dcf",
+    "path": "src/game/UserProfile.ts"
+  },
+  "src/game/entities/Character.ts": {
+    "summary": "```markdown\n- **Responsibility**:\n  Defines an abstract `Character` entity for a 2D game, handling sprite animations, movement logic, directional facing, and collision within a Phaser-based engine.\n\n- **Exports**:\n  - **Type**: `Facing` (directional enum: `\"down\" | \"side\" | \"up\"`).\n  - **Type**: `CharacterConfig` (configuration object for character initialization).\n  - **Class**: `Character` (abstract base class for playable/NPC entities, managing sprites, animations, and movement).\n\n- **Dependencies**:\n  - **External**: `phaser` (for `Scene`, `Sprite`, and animation/physics systems).\n  - **Internal**: None (self-contained within the file).\n```",
+    "hash": "2d38f240bfec1215c37e39a5507f679b",
+    "path": "src/game/entities/Character.ts"
+  },
+  "src/game/entities/Crop.ts": {
+    "summary": "```markdown\n- **Responsibility**: Manages the lifecycle, rendering, and growth mechanics of crops in a farming simulation, including planting, growth stages, harvesting, and serialization.\n\n- **Exports**:\n  - **Types**:\n    - `CropType` (Union: `\"strawberry\" | \"leek\" | \"potato\" | \"onion\"`)\n    - `CropState` (Interface: `{ tileX, tileY, type, growthStage }`)\n  - **Class**:\n    - `Crop` (Static and instance methods for crop management, growth, and rendering)\n\n- **Dependencies**:\n  - **External**:\n    - `phaser` (for `Scene`, `GameObjects.Sprite`, `Loader.LoaderPlugin`, and utility functions like `Phaser.Math.Clamp`).\n```",
+    "hash": "242bd5ca9819f8ef91579583e2de1c2a",
+    "path": "src/game/entities/Crop.ts"
+  },
+  "src/game/entities/NPC.ts": {
+    "summary": "```markdown\n# **Architectural Summary: `NPC.ts`**\n\n- **Responsibility**:\n  Defines and manages **Non-Player Characters (NPCs)** in the game, including their **preloading logic**, **patrol routines**, and **dialogue data integration**, while extending the base `Character` class for movement and rendering.\n\n- **Exports**:\n  - **Classes**:\n    - `NPC` – Extends `Character` to implement NPC-specific behavior (patrols, dialogue).\n  - **Interfaces/Types**:\n    - `PatrolStep` – Defines a movement segment (velocity + duration).\n    - `NpcDefinition` – Configuration blueprint for NPCs (textures, position, patrol routes, dialogue).\n  - **Static Methods**:\n    - `preloadAll()` – Batch-loads assets (sprites/dialogue) for multiple NPCs.\n    - `dialogueKey()` – Resolves the dialogue JSON key for a given `NpcDefinition`.\n\n- **Dependencies**:\n  - **External**:\n    - `phaser` (for `Scene` and loader utilities).\n  - **Internal**:\n    - `@/game/entities/Character` – Base class for movement/animation logic.\n  - **Asset Paths**:\n    - Spritesheets: Loaded from `{basePath}/**` (e.g., `assets/Characters/Luke`).\n    - Dialogue: Loaded from `assets/dialogue/{textureKey}.json`.\n```",
+    "hash": "d7de4866a21be7b5037f025f242f33d0",
+    "path": "src/game/entities/NPC.ts"
+  },
+  "src/game/entities/PlayerCharacter.ts": {
+    "summary": "```markdown\n- **Responsibility**:\n  Defines the player-controlled character entity, extending base `Character` functionality with keyboard input handling (WASD/arrow keys) and movement logic.\n\n- **Exports**:\n  - `PlayerCharacter` (class): A player-controllable entity that processes input and updates movement state.\n\n- **Dependencies**:\n  - External:\n    - `phaser` (library): Used for `Scene`, input handling, and keyboard events.\n  - Internal:\n    - `@/game/entities/Character`: Inherits core character behaviors (e.g., movement, animations).\n```",
+    "hash": "22dfe7c9e48231b4163c17f3e513a7fb",
+    "path": "src/game/entities/PlayerCharacter.ts"
+  },
+  "src/game/entities/Shopkeeper.ts": {
+    "summary": "```markdown\n- **Responsibility**: Defines a non-movable `Shopkeeper` entity (a specialized `Character`) with idle animations for in-game shops or NPC interactions.\n\n- **Exports**:\n  - `Shopkeeper` (class): A static entity inheriting from `Character`, with preloading logic for its spritesheet.\n\n- **Dependencies**:\n  - External:\n    - `phaser` (library): Used for `Scene` and `Phaser.Loader.LoaderPlugin`.\n  - Internal:\n    - `@/game/entities/Character`: Base class for entity behavior and rendering.\n```",
+    "hash": "8bf2d1536bb523c415dd5be8814a8412",
+    "path": "src/game/entities/Shopkeeper.ts"
+  },
+  "src/game/feature.ts": {
+    "summary": "```markdown\n# **Architectural Summary: `src/game/feature.ts`**\n\n- **Responsibility**:\n  Manages the in-game **tutorial system**, including step-by-step guidance, UI rendering, and progression triggers (e.g., NPC interactions).\n\n- **Exports**:\n  - `feature` (object):\n    - `onUpdate(scene: Scene, delta: number)` – Initializes the tutorial on first update.\n    - `onNpcTalkStart(scene: Scene, npcName: string)` – Advances tutorial steps when talking to specific NPCs (e.g., \"Luke\").\n    - `onConversationEnd()` – Placeholder for post-conversation logic (currently empty).\n\n- **Dependencies**:\n  - **External**:\n    - `phaser` (type `Scene`) – Used for rendering UI elements and handling input.\n  - **Internal**: *None* (self-contained).\n\n- **Key Behaviors**:\n  - Renders a **modal tutorial panel** with styled text, buttons (Next/Close), and a semi-transparent overlay.\n  - Tracks progression via `tutorialStep` and persists completion with `tutorialShown`.\n  - Tutorial steps are hardcoded in `TUTORIAL_STEPS` (9-step onboarding flow).\n  - Triggers advancement via NPC interactions (e.g., talking to \"Luke\") or manual \"Next\" button clicks.\n```",
+    "hash": "a9f91cc79db1a0a437bbdb6b4546846a",
+    "path": "src/game/feature.ts"
+  },
+  "src/game/main.ts": {
+    "summary": "```markdown\n- **Responsibility**: Initializes and configures the core Phaser game instance, defining global settings (rendering, physics, scenes) and exposing a function to start the game in a specified DOM container.\n\n- **Exports**:\n  - `StartGame` (function): Factory function that creates and returns a configured `Phaser.Game` instance.\n\n- **Dependencies**:\n  - Internal:\n    - `@/game/scenes/Game` (as `MainGame`): Primary game scene.\n    - `@/game/scenes/Hud`: Heads-up display scene.\n  - External:\n    - `phaser` (library): Core game engine (used for `Game`, `Scale`, `AUTO`, and type definitions).\n```",
+    "hash": "af719a9273883cd8f226db6022eb9dba",
+    "path": "src/game/main.ts"
+  },
+  "src/game/scenes/Game.ts": {
+    "summary": "```markdown\n# **Architectural Summary: `Game.ts`**\n\n### **Responsibility**\nServes as the **core game scene** in a Phaser-based farming/ RPG engine, managing the player, NPCs, map interactions, dialogue systems, and game state (e.g., crops, achievements, and shop mechanics).\n\n---\n\n### **Exports**\n- **`Game`** (class, extends `Phaser.Scene`):\n  Primary scene handling world rendering, entity updates, input, and cross-system coordination (e.g., camera, collisions, UI events).\n\n---\n\n### **Dependencies**\n#### **Internal Modules**\n- **Systems**:\n  - `@/systems/Camera` – Camera configuration and dead-zone updates.\n  - `@/systems/Map` – Map creation and asset preloading.\n  - `@/systems/TileInteraction` – Tile-click handling and outline rendering.\n  - `@/systems/AchievementSystem` – Achievement preloading/registration.\n- **Entities**:\n  - `@/entities/Character` – Base character logic (e.g., sprites, movement).\n  - `@/entities/PlayerCharacter` – Player-specific controls/state.\n  - `@/entities/NPC` – NPC definitions, spawning, and dialogue.\n  - `@/entities/Shopkeeper` – Shop interaction logic.\n  - `@/entities/Crop` – Crop planting/harvesting mechanics.\n- **State Management**:\n  - `@/GameState` – Save/load functionality (`restoreState`).\n  - `@/UserProfile` – Player profile/data tracking.\n- **UI/Features**:\n  - `@/feature` – Feature flags/event hooks (e.g., `onUpdate`, `onNpcTalkStart`).\n  - `@/ai/mistral` – AI-generated content (e.g., dialogue cards).\n\n#### **External Libraries**\n- **Phaser** – Core game framework (e.g., `Scene`, `Physics`, `Input`).\n\n---\n### **Key Architectural Notes**\n1. **Scene Composition**:\n   - Acts as a **facade** for subsystems (e.g., map, camera, NPCs), delegating logic to specialized modules.\n   - Uses Phaser’s **registry** for cross-scene state sharing (e.g., `conversationOpen`, `gold`, `cropCounts`).\n\n2. **Entity Management**:\n   - Dynamically spawns/updates **player**, **NPCs**, **shopkeepers**, and **crops** via composed classes.\n   - Handles **collisions** (via Phaser Physics) and **interactions** (e.g., proximity-based dialogue).\n\n3. **Event-Driven UI**:\n   - Listens to registry events (e.g., `changedata-conversationOpen`) to sync with the **HUD scene** (e.g., dialogue pane).\n   - Avoids circular dependencies by using **Phaser’s event system** for decoupled communication.\n\n4. **State Persistence**:\n   - Restores saved state (e.g., planted crops) on scene initialization via `GameState`.\n\n5. **Feature Flags**:\n   - Uses a `feature` module for **conditional logic** (e.g., analytics, experimental mechanics).\n\n6. **AI Integration**:\n   - Calls external AI (`mistral.ts`) for dynamic content generation (e.g., debug dialogue cards).\n\n---\n### **Relationships**\n- **Parent Scene**: Launches and communicates with the **HUD scene** (e.g., dialogue UI).\n- **Data Flow**:\n  - **Input** (keyboard/pointer) → **Game** → **Systems/Entities** → **Registry** → **HUD**.\n  - **State Changes** (e.g., achievements, crops) propagate via registry events.\n```",
+    "hash": "0b9a483cd629b7a7ba94e1c61e82eee2",
+    "path": "src/game/scenes/Game.ts"
+  },
+  "src/game/scenes/Hud.ts": {
+    "summary": "```markdown\n- **Responsibility**: Manages the Heads-Up Display (HUD) scene in the game, orchestrating UI components like hotbar, gold counter, dialogue, shop, cards, and achievements.\n\n- **Exports**:\n  - `Hud` (class): A Phaser `Scene` subclass responsible for initializing and updating all HUD UI elements.\n\n- **Dependencies**:\n  - Internal UI Components:\n    - `@/game/ui/Hotbar`\n    - `@/game/ui/GoldCounter`\n    - `@/game/ui/DialoguePane`\n    - `@/game/ui/ShopPane`\n    - `@/game/ui/CardPane`\n    - `@/game/ui/AchievementPane` (and its `Achievement` type)\n  - External:\n    - `phaser` (for `Scene` base class).\n```",
+    "hash": "9df92810a0600f7e302fc2d9881581df",
+    "path": "src/game/scenes/Hud.ts"
+  },
+  "src/game/systems/AchievementSystem.ts": {
+    "summary": "```markdown\n# **AchievementSystem.ts - Architectural Summary**\n\n- **Responsibility**:\n  Manages the loading, registration, and unlocking of in-game achievements by monitoring registry data changes and applying predefined conditions.\n\n- **Exports**:\n  - **Interfaces/Types**:\n    - `Achievement` (interface) – Defines structure for an achievement (ID, label, condition).\n  - **Functions**:\n    - `preloadAchievements()` – Loads achievement definitions from a JSON file.\n    - `registerAchievements()` – Sets up event listeners to evaluate and unlock achievements based on game state changes.\n\n- **Dependencies**:\n  - **External**:\n    - `phaser` (for `Scene`, `LoaderPlugin`, and registry/event systems).\n  - **Internal**:\n    - None (self-contained; relies on Phaser’s built-in systems).\n```",
+    "hash": "291bd47e99f2d97d2b011181c5a1ed33",
+    "path": "src/game/systems/AchievementSystem.ts"
+  },
+  "src/game/systems/Camera.ts": {
+    "summary": "```markdown\n- **Responsibility**: Manages Phaser camera configuration, including zoom, dead zones, and target-following behavior for a 2D game scene.\n\n- **Exports**:\n  - `CAMERA` (constant): Camera configuration object (zoom, dead zone ratios).\n  - `configureCamera`: Initializes camera bounds, zoom, and target-following.\n  - `updateCameraDeadZone`: Dynamically adjusts camera dead zones based on viewport dimensions.\n\n- **Dependencies**:\n  - External: `Phaser` (Cameras, GameObjects).\n  - Internal: None.\n```",
+    "hash": "d62fd7e8e9eb6fe7c84db634f994fabe",
+    "path": "src/game/systems/Camera.ts"
+  },
+  "src/game/systems/Map.ts": {
+    "summary": "```markdown\n- **Responsibility**: Handles the loading, initialization, and configuration of Tiled-based maps in the Phaser game engine, including tile layers, collisions, and world dimensions.\n\n- **Exports**:\n  - **`MapData`**: Interface defining the structure of map-related data (layers, tile dimensions, world bounds).\n  - **`createMap(scene: Phaser.Scene)`**: Function to generate a `MapData` object from a Tiled map in a given Phaser scene.\n  - **`preloadMap(loader: Phaser.Loader.LoaderPlugin)`**: Function to preload map assets (tilemaps, tilesets) via Phaser’s loader.\n\n- **Dependencies**:\n  - External: `Phaser` (Tilemaps, Scene, Loader plugins).\n  - Internal: None (self-contained, no intra-project imports).\n```",
+    "hash": "73495c9706d680168c084f668552d157",
+    "path": "src/game/systems/Map.ts"
+  },
+  "src/game/systems/TileInteraction.ts": {
+    "summary": "```markdown\n### **Architectural Summary: `TileInteraction.ts`**\n\n- **Responsibility**:\n  Manages player interactions with tiles (e.g., highlighting, planting, and harvesting crops) based on proximity and input events in a farming game.\n\n- **Exports**:\n  - `updateTileOutline()`: Updates the visual outline of a tile under the cursor if it’s near the player.\n  - `handleTileClick()`: Handles click logic for planting/harvesting crops on valid dirt tiles.\n\n- **Dependencies**:\n  - Internal:\n    - `@/game/entities/Crop` (for `Crop` entity methods like `plant()` and `harvest()`).\n  - External:\n    - `Phaser` (for `Scene`, `Tilemaps`, `GameObjects`, and `Input` systems).\n```",
+    "hash": "57da330dd56dddaf5706969742cd4016",
+    "path": "src/game/systems/TileInteraction.ts"
+  },
+  "src/game/ui/AchievementPane.ts": {
+    "summary": "```markdown\n- **Responsibility**:\n  Renders and manages a UI pane displaying player achievements (locked/unlocked) in a Phaser-based game, dynamically updating their visual state when unlocked.\n\n- **Exports**:\n  - `AchievementPane` (class): Handles rendering, layout, and event-driven updates for achievements.\n  - `Achievement` (type): Re-exported from `@/systems/AchievementSystem` (type definition only).\n\n- **Dependencies**:\n  - **Internal**:\n    - `@/game/ui/styles` (for `TEXT_STYLE` UI constants).\n    - `@/systems/AchievementSystem` (for `Achievement` type).\n  - **External**:\n    - `phaser` (for `Scene`, game object rendering, and event systems).\n```",
+    "hash": "796d798315610c1b1083ec5980f109b4",
+    "path": "src/game/ui/AchievementPane.ts"
+  },
+  "src/game/ui/CardPane.ts": {
+    "summary": "```markdown\n### **Architectural Summary: `CardPane.ts`**\n\n- **Responsibility**:\n  Renders an interactive card-selection UI overlay for choosing game features, handles user input, and communicates selections to the backend via API calls.\n\n- **Exports**:\n  - **`FeatureCard`** (interface): Defines the structure of a selectable card (title, flavor text, description, and affected game systems).\n  - **`CardPane`** (class): Manages the UI lifecycle, card rendering, selection logic, and API integration for feature implementation.\n\n- **Dependencies**:\n  - **External**:\n    - `phaser` (for `Scene`, graphics, and input handling).\n  - **Internal**:\n    - `@/ui/styles` (for `TEXT_STYLE` typography presets).\n    - `@/GameState` (for `saveState` persistence utility).\n```",
+    "hash": "e1f68d9e0fd234548f9a3801b99f92cd",
+    "path": "src/game/ui/CardPane.ts"
+  },
+  "src/game/ui/DialoguePane.ts": {
+    "summary": "```markdown\n# **DialoguePane.ts - Architectural Summary**\n\n- **Responsibility**:\n  Manages the UI rendering and interaction logic for dialogue/conversation panels in the game, including NPC text display, player choices, input handling, and conversation history tracking.\n\n- **Exports**:\n  - **`DialoguePane`** (class): A UI component handling dialogue rendering, player input, and conversation state.\n\n- **Dependencies**:\n  - **External**:\n    - `phaser` (for `Scene`, input handling, and rendering).\n  - **Internal**:\n    - `@/game/ui/styles` (imports `TEXT_STYLE` for consistent text formatting).\n\n- **Key Features**:\n  - **UI Layout**: Hardcoded positions/sizes for dialogue panel, portrait, text, and options.\n  - **Input Handling**: Keyboard (`WASD`, `Arrow Keys`, `Enter`, `Space`, `E`, `ESC`) and mouse interactions for option selection.\n  - **State Management**:\n    - Tracks current dialogue line, selected option, and visibility.\n    - Logs conversation history (NPC name, dialogue turns, timestamps) to the game registry.\n  - **Registry Integration**:\n    - Listens to `conversationOpen` registry key to toggle visibility.\n    - Stores/updates dialogue history and NPC interaction flags.\n  - **Visual Feedback**: Highlights selected options and updates text styling dynamically.\n  - **Cleanup**: Destroys all Phaser objects on scene shutdown to prevent memory leaks.\n\n- **Data Structures**:\n  - **`DialogueOption`**: Represents a player choice (`label` + `next` line index).\n  - **`DialogueLine`**: Contains NPC text and branching `options`.\n  - **`ConversationTurn`/`ConversationRecord`**: Logs dialogue history for replay or quest tracking.\n```",
+    "hash": "138c1521c11aab008eafd0ade797ffab",
+    "path": "src/game/ui/DialoguePane.ts"
+  },
+  "src/game/ui/GoldCounter.ts": {
+    "summary": "```markdown\n# **GoldCounter.ts - Architectural Summary**\n\n- **Responsibility**:\n  Manages the rendering and real-time updates of a gold currency counter in the game's HUD, reacting to registry changes and window resizing.\n\n- **Exports**:\n  - `GoldCounter` (class) – A UI component that displays and updates the player's gold value.\n\n- **Dependencies**:\n  - **External**:\n    - `phaser` (Scene, GameObjects.Text, Scale.Events, Scenes.Events)\n  - **Internal**:\n    - `@/game/ui/styles` (imports `TEXT_STYLE` for consistent UI styling).\n```",
+    "hash": "4b49fd964fb711536d11823651ce82c0",
+    "path": "src/game/ui/GoldCounter.ts"
+  },
+  "src/game/ui/Hotbar.ts": {
+    "summary": "```markdown\n- **Responsibility**:\n  Manages an in-game **hotbar UI** for selecting and displaying available crops, handling keyboard/mouse wheel input for navigation and syncing with the game's crop inventory.\n\n- **Exports**:\n  - `Hotbar` (class): A UI component that renders a hotbar with crop slots, selection logic, and dynamic updates based on player inventory.\n\n- **Dependencies**:\n  - **External**:\n    - `phaser` (for `Scene`, input handling, and rendering).\n  - **Internal**:\n    - `@/game/entities/Crop` (for `CropType` enum/type).\n    - `@/game/ui/styles` (for `TEXT_STYLE` UI constants).\n  - **Assets**:\n    - Assumes preloaded textures: `\"crops\"` (sprite atlas), `\"tile-outline\"` (selection highlight).\n\n- **Key Features**:\n  - **Input Handling**: Keyboard (1–4 keys) and mouse wheel for slot selection.\n  - **Dynamic UI**: Updates slot quantities when crop counts change (via `changedata-cropCounts` event).\n  - **State Management**: Stores the selected crop type in the Phaser `Registry` for global access.\n  - **Responsive Layout**: Repositions elements on window resize.\n  - **Texture Generation**: Dynamically creates the hotbar background if missing.\n```",
+    "hash": "4024b97e5853866b049c33111412c941",
+    "path": "src/game/ui/Hotbar.ts"
+  },
+  "src/game/ui/ShopPane.ts": {
+    "summary": "```markdown\n- **Responsibility**:\n  Manages the in-game shop UI, handling item selection, purchase logic, and visibility toggling based on game state (registry events).\n\n- **Exports**:\n  - `ShopPane` (class): A UI panel for displaying and interacting with shop items (crops), including keyboard/mouse input handling and purchase mechanics.\n\n- **Dependencies**:\n  - External:\n    - `phaser` (library): For scene management, rendering, input handling, and game object manipulation.\n  - Internal:\n    - `@/game/ui/styles` (local): Imports `TEXT_STYLE` for consistent text styling across UI elements.\n```",
+    "hash": "a6621cbf32b018e6b104398d264c185f",
+    "path": "src/game/ui/ShopPane.ts"
+  },
+  "src/game/ui/styles.ts": {
+    "summary": "```markdown\n- **Responsibility**: Defines reusable text styling configurations for UI elements in the game's Phaser-based rendering system.\n\n- **Exports**:\n  - `TEXT_STYLE`: A `Phaser.Types.GameObjects.Text.TextStyle` object containing default font, color, and stroke properties.\n\n- **Dependencies**:\n  - External: `Phaser` (types only, no runtime imports).\n  - Internal: None.\n```",
+    "hash": "1c54eb21912a43988cc2a4c83d91a6dc",
+    "path": "src/game/ui/styles.ts"
+  },
+  "src/ai/mistral.ts": {
+    "contract": "```markdown\n### **Architectural Summary: `src/ai/mistral.ts`**\n\n- **Responsibility**:\n  Handles AI-driven generation of game feature cards by interfacing with Mistral's API, orchestrating a two-step agent workflow (analyst → designer) to transform player profile data into structured `FeatureCard` outputs.\n\n---\n\n### **Exports**\n1. **Re-exported Type**:\n   ```ts\n   export type { FeatureCard };\n   ```\n\n2. **Async Function**:\n   ```ts\n   export async function generateCards(profileJSON: object): Promise<FeatureCard[]>;\n   ```\n\n---\n\n### **Dependencies**\n- **External**:\n  - `@mistralai/mistralai` (Mistral AI client SDK).\n- **Internal**:\n  - `../game/ui/CardPane` (for `FeatureCard` type).\n- **Environment Variables**:\n  - `VITE_MISTRAL_API_KEY` (API authentication).\n  - `VITE_ANALYST_AGENT_ID` (Agent ID for behavioral analysis).\n  - `VITE_DESIGNER_AGENT_ID` (Agent ID for card design).\n```",
+    "hash": "635b031c727b7defd6b1be997ac22531",
+    "path": "src/ai/mistral.ts"
+  },
+  "src/main.ts": {
+    "contract": "```markdown\n### **Architectural Summary: `src/main.ts`**\n\n- **Responsibility**:\n  Serves as the entry point for the game engine, initializing the game upon DOM content load.\n\n- **Exports**:\n  *None* (this file is purely an execution script).\n\n- **Dependencies**:\n  - `@/game/main` (imported as `StartGame`)\n\n---\n\n### **Contract (Exported Signatures)**\n*None* (no interfaces, types, classes, or functions are exported).\n```",
+    "hash": "0ad2ee710f3335f00342337af09b5f48",
+    "path": "src/main.ts"
+  },
+  "src/vite-env.d.ts": {
+    "contract": "```markdown\n### **Architectural Summary: `vite-env.d.ts`**\n\n- **Responsibility**:\n  Provides TypeScript ambient type declarations for Vite-specific environment variables and imports (e.g., static asset handling, HMR, and glob imports) in the project.\n\n- **Exports**:\n  *None (ambient declarations only).*\n  The file extends global TypeScript types via:\n  - `/// <reference types=\"vite/client\" />`\n    (Implicitly injects Vite client-side types like `import.meta.env`, `import.meta.glob`, etc.)\n\n- **Dependencies**:\n  - External: `vite/client` (TypeScript reference for Vite’s client-side APIs).\n\n---\n### **Contract (Exported Declarations)**\n*No explicit exports—this file is purely for ambient type augmentation.*\n**Key Implicit Types Provided by `vite/client`** (via reference):\n- `import.meta.env`: Runtime environment variables (e.g., `VITE_*`).\n- `import.meta.glob`: Type-safe static asset/glob imports.\n- Hot Module Replacement (HMR) types (e.g., `import.meta.hot`).\n```",
+    "hash": "0352474ba2918efe13895edbc3780d94",
+    "path": "src/vite-env.d.ts"
+  }
+}

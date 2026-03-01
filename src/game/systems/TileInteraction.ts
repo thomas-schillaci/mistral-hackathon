@@ -60,7 +60,8 @@ export function handleTileClick(
     const tileX = Math.floor(worldPoint.x / tileWidth);
     const tileY = Math.floor(worldPoint.y / tileHeight);
 
-    if (baseLayer.getTileAt(tileX, tileY).index !== DIRT_TILE_ID) return;
+    const tile = baseLayer.getTileAt(tileX, tileY);
+    if (!tile || tile.index !== DIRT_TILE_ID) return;
     if (!isNearPlayer(tileX, tileY, playerSprite.x, playerSprite.y, tileWidth, tileHeight)) return;
 
     const crop = Crop.getCrop(tileX, tileY);

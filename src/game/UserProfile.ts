@@ -9,6 +9,7 @@ export type ProfileSnapshot = {
     npcsTalkedToPercent: string;
     cropsHarvested: Record<string, number>;
     dialogueHistory: ConversationRecord[];
+    unlockedAchievements: string[];
 };
 
 export class UserProfile {
@@ -28,6 +29,7 @@ export class UserProfile {
             npcsTalkedToPercent: `${totalNpcCount > 0 ? 100 * npcsTalkedTo.length / totalNpcCount : 0}%`,
             cropsHarvested: { ...this.scene.registry.get("cropsHarvested") },
             dialogueHistory: [...this.scene.registry.get("dialogueHistory")],
+            unlockedAchievements: [...(this.scene.registry.get("unlockedAchievements") as string[])],
         };
     }
 }

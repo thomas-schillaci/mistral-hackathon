@@ -1,0 +1,7 @@
+[
+  {
+    "id": "talk_to_villager",
+    "label": "Talk to one villager",
+    "condition": "npcsTalkedToMin1"
+  }
+]

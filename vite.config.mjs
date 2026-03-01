@@ -1,6 +1,8 @@
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite';
+import {implementPlugin} from './vite-plugin-implement.mjs';
 
-export default defineConfig(({ command }) => ({
+export default defineConfig(({command}) => ({
+    plugins: [implementPlugin()],
     base: './',
     build: {
         rollupOptions: {
@@ -13,9 +15,9 @@ export default defineConfig(({ command }) => ({
         ...(command === 'build' && {
             minify: 'terser',
             terserOptions: {
-                compress: { passes: 2 },
+                compress: {passes: 2},
                 mangle: true,
-                format: { comments: false }
+                format: {comments: false}
             }
         })
     },

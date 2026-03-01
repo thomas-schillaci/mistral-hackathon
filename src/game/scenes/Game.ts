@@ -8,7 +8,10 @@ import {NPC, NpcDefinition} from "../entities/NPC";
 import {PlayerCharacter} from "../entities/PlayerCharacter";
 import {Shopkeeper} from "../entities/Shopkeeper";
 import {UserProfile} from "../UserProfile";
-import { generateCards } from '../../ai/mistral.ts';
+import {generateCards} from '../../ai/mistral.ts';
+import {preloadAchievements, registerAchievements} from '../systems/AchievementSystem';
+import {feature} from '../feature';
+import {restoreState} from '../GameState';
 
 const NPCS: NpcDefinition[] = [
     {
@@ -46,6 +49,13 @@ export class Game extends Scene {
     private debugKey!: Phaser.Input.Keyboard.Key;
     private interactKey!: Phaser.Input.Keyboard.Key;
     private isConversationOpen = false;
+    // The DialoguePane (in the Hud scene) can also write conversationOpen=false when
+    // the player selects a closing option. This listener lets that trigger a proper
+    // close (unpausing characters etc.) without the DialoguePane needing a direct
+    // reference to this scene.
+    // The _settingFromGame flag prevents a re-entrancy loop: registry.set() fires
+    // changedata events synchronously, so without the guard, setConversationOpen()
+    // would trigger this listener, which would call setConversationOpen() again, ad infinitum.
     private _settingFromGame = false;
 
     constructor() {
@@ -55,6 +65,7 @@ export class Game extends Scene {
     preload() {
         preloadMap(this.load);
         this.load.image('tile-outline', 'assets/UI/outline.png');
+        preloadAchievements(this.load);
         Crop.preloadSpritesheet(this.load);
         Character.preloadSpritesheets(this.load, "player", "assets/Characters/Player");
         NPC.preloadAll(this.load, NPCS);
@@ -80,23 +91,28 @@ export class Game extends Scene {
         this.registry.set("conversationNpc", null);
         this.registry.set("conversationDialogue", null);
         this.registry.set("shopOpen", false);
-        this.registry.set("cropsHarvested", { strawberry: 0, leek: 0, potato: 0, onion: 0 });
+        this.registry.set("cropsHarvested", {strawberry: 0, leek: 0, potato: 0, onion: 0});
         this.registry.set("dialogueHistory", []);
         this.registry.set("gameStartedAt", Date.now());
         this.registry.set("npcsTalkedTo", [] as string[]);
         this.registry.set("totalNpcCount", NPCS.length);
+        this.registry.set("cardsOpen", false);
+        this.registry.set("pendingCards", []);
+        this.registry.set("unlockedAchievements", [] as string[]);
+
+        const savedState = restoreState(this.registry);
+        if (savedState?.plantedCrops) {
+            Crop.restore(this, savedState.plantedCrops);
+        }
+
         this.userProfile = new UserProfile(this);
-        // The DialoguePane (in the Hud scene) can also write conversationOpen=false when
-        // the player selects a closing option. This listener lets that trigger a proper
-        // close (unpausing characters etc.) without the DialoguePane needing a direct
-        // reference to this scene.
-        // The _settingFromGame flag prevents a re-entrancy loop: registry.set() fires
-        // changedata events synchronously, so without the guard, setConversationOpen()
-        // would trigger this listener, which would call setConversationOpen() again, ad infinitum.
+        registerAchievements(this);
+
         this.registry.events.on("changedata-conversationOpen", (_: unknown, value: boolean) => {
             if (this._settingFromGame) return;
             if (!value && this.isConversationOpen) this.setConversationOpen(false);
         });
+
         this.registry.events.on("changedata-shopOpen", (_: unknown, value: boolean) => {
             if (this._settingFromGame) return;
             if (!value && this.isConversationOpen) this.setShopOpen(false);
@@ -145,6 +161,8 @@ export class Game extends Scene {
             this.debug();
         }
 
+        feature.onUpdate(this, delta);
+
         this.player.update(delta);
         for (const npc of this.npcs) {
             npc.update(delta);
@@ -156,7 +174,11 @@ export class Game extends Scene {
     }
 
     private debug() {
-        generateCards(this.userProfile.toJSON(), "social_butterfly");
+        generateCards(this.userProfile.toJSON()).then(cards => {
+            console.log(cards);
+            this.registry.set("pendingCards", cards);
+            this.registry.set("cardsOpen", true);
+        });
     }
 
     private tryToggleConversation() {
@@ -204,6 +226,11 @@ export class Game extends Scene {
         this.player.setPaused(open);
         if (this.activeNpc) {
             this.activeNpc.setPaused(open);
+        }
+        if (open && this.activeNpc) {
+            feature.onNpcTalkStart(this, this.activeNpc.name);
+        } else if (!open && this.activeNpc) {
+            feature.onConversationEnd(this, this.activeNpc.name);
         }
         if (!open) {
             this.activeNpc = null;

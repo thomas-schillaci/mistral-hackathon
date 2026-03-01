@@ -1,22 +1,16 @@
-import Mistral from '@mistralai/mistralai';
-import { QueryClient, MutationObserver } from '@tanstack/query-core';
+import {Mistral} from '@mistralai/mistralai';
+import type {FeatureCard} from '../game/ui/CardPane';
 
-export interface FeatureCard {
-    title: string;
-    flavor_text: string;
-    description: string;
-    game_systems_touched: string[];
-}
+export type {FeatureCard};
 
-const client = new Mistral({ apiKey: import.meta.env.VITE_MISTRAL_API_KEY as string });
-const queryClient = new QueryClient();
+const client = new Mistral({apiKey: import.meta.env.VITE_MISTRAL_API_KEY as string});
 
-async function runPipeline(profileJSON: object, achievementId: string): Promise<FeatureCard[]> {
+export async function generateCards(profileJSON: object): Promise<FeatureCard[]> {
     // STEP 1 — ANALYST
     console.log("[ANALYST] Sending profile...");
     const analystRes = await client.agents.complete({
         agentId: import.meta.env.VITE_ANALYST_AGENT_ID as string,
-        messages: [{ role: "user", content: JSON.stringify(profileJSON) + "\nAchievement earned: " + achievementId }],
+        messages: [{role: "user", content: JSON.stringify(profileJSON)}],
     });
     const behavioralBrief = analystRes.choices![0].message.content as string;
     console.log("[ANALYST] Brief:", behavioralBrief);
@@ -25,22 +19,11 @@ async function runPipeline(profileJSON: object, achievementId: string): Promise<
     console.log("[DESIGNER] Sending brief...");
     const designerRes = await client.agents.complete({
         agentId: import.meta.env.VITE_DESIGNER_AGENT_ID as string,
-        messages: [{ role: "user", content: behavioralBrief }],
+        messages: [{role: "user", content: behavioralBrief}],
+        responseFormat: {type: "json_object"},
     });
     const raw = designerRes.choices![0].message.content as string;
     const cards = JSON.parse(raw) as FeatureCard[];
-    console.log("[DESIGNER] Cards:", JSON.stringify(cards, null, 2));
+    console.log("[DESIGNER] Cards:", cards);
     return cards;
-}
-
-const mutation = new MutationObserver(queryClient, {
-    mutationFn: ({ profileJSON, achievementId }: { profileJSON: object; achievementId: string }) =>
-        runPipeline(profileJSON, achievementId),
-    onSuccess: (cards) => console.log("[GAME] Cards received:", cards),
-    onError: (err) => console.error("[GAME] Pipeline failed:", err),
-});
-
-export function generateCards(profileJSON: object, achievementId: string): void {
-    if (mutation.getCurrentResult().status === 'pending') return;
-    mutation.mutate({ profileJSON, achievementId });
 }
