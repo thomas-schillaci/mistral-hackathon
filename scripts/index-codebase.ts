@@ -38,6 +38,24 @@ function generateProjectTree(dir: string, fileList: string[] = []): string {
 }
 
 /**
+ * Recursively lists all files under public/assets as Phaser-ready paths
+ * (relative to public/, since Vite serves public/ at the root).
+ */
+function getAssetPaths(dir: string, fileList: string[] = []): string[] {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+            getAssetPaths(fullPath, fileList);
+        } else {
+            // Strip the leading "public/" so paths match what Phaser expects
+            fileList.push(fullPath.replace(/^public[\\/]/, ''));
+        }
+    }
+    return fileList;
+}
+
+/**
  * Recursively finds all TypeScript files in a directory
  */
 function getAllTsFiles(dir: string, fileList: string[] = []): string[] {
@@ -63,7 +81,12 @@ async function runIndexer() {
 
     // 1. Generate the folder structure map for the Coder
     const structure = generateProjectTree('src/game');
-    fs.writeFileSync(STRUCTURE_FILE, structure);
+    const assetPaths = getAssetPaths('public/assets');
+    const fullStructure =
+        structure +
+        '\n\nASSETS (paths are relative to public/ — use as-is in scene.load calls):\n' +
+        assetPaths.join('\n');
+    fs.writeFileSync(STRUCTURE_FILE, fullStructure);
     console.log(`✅ Project structure saved to ${STRUCTURE_FILE}`);
 
     // 2. Load existing index for incremental updates

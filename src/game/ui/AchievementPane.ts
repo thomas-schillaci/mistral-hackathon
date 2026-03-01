@@ -10,18 +10,32 @@ export class AchievementPane {
     private static readonly HUD_SCALE = 2;
     private static readonly MARGIN = 18;
     // GoldCounter: y=18, scale=3, (fontSize 16 + padding.y*2=6) * 3 = 66px tall → bottom at 84
-    private static readonly START_Y = 92;
+    private static readonly START_Y = 164;
     // Per-row display height at scale 2: (fontSize 16 + padding.y*2=6) * 2 = 44px
     private static readonly ROW_HEIGHT = 44;
     private static readonly ROW_GAP = 4;
 
     private readonly scene: Scene;
     private readonly achievements: Achievement[];
+    private readonly title: Phaser.GameObjects.Text;
     private readonly rows: Phaser.GameObjects.Text[];
 
     constructor(scene: Scene, achievements: Achievement[]) {
         this.scene = scene;
         this.achievements = achievements;
+
+        const titleY = AchievementPane.START_Y - AchievementPane.ROW_HEIGHT - AchievementPane.ROW_GAP;
+        this.title = scene.add
+            .text(0, titleY, "Achievements", {
+                ...TEXT_STYLE,
+                color: "#ffffff",
+                backgroundColor: "#1f1f1ff2",
+                padding: { x: 4, y: 3 },
+            })
+            .setOrigin(1, 0)
+            .setScrollFactor(0)
+            .setScale(AchievementPane.HUD_SCALE)
+            .setDepth(100001);
 
         this.rows = achievements.map((achievement, i) => {
             const y = AchievementPane.START_Y + i * (AchievementPane.ROW_HEIGHT + AchievementPane.ROW_GAP);
@@ -56,12 +70,14 @@ export class AchievementPane {
 
     private layout(): void {
         const x = this.scene.scale.width - AchievementPane.MARGIN;
+        this.title.setX(x);
         this.rows.forEach(row => row.setX(x));
     }
 
     private destroy(): void {
         this.scene.registry.events.off(`changedata-${AchievementPane.REGISTRY_KEY}`, this.onUnlockedChanged, this);
         this.scene.scale.off(Phaser.Scale.Events.RESIZE, this.layout, this);
+        this.title.destroy();
         this.rows.forEach(row => row.destroy());
     }
 }

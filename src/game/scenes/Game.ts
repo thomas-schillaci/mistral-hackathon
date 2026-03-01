@@ -3,7 +3,7 @@ import {configureCamera, updateCameraDeadZone} from "../systems/Camera";
 import {createMap, preloadMap} from "../systems/Map";
 import {handleTileClick, updateTileOutline} from "../systems/TileInteraction";
 import {Character} from "../entities/Character";
-import {Crop} from "../entities/Crop";
+import {Crop, CropType} from "../entities/Crop";
 import {NPC, NpcDefinition} from "../entities/NPC";
 import {PlayerCharacter} from "../entities/PlayerCharacter";
 import {Shopkeeper} from "../entities/Shopkeeper";
@@ -12,6 +12,7 @@ import {generateCards} from '../../ai/mistral.ts';
 import {preloadAchievements, registerAchievements} from '../systems/AchievementSystem';
 import {feature} from '../feature';
 import {restoreState} from '../GameState';
+import type {GameAPI} from '../GameAPI';
 
 const NPCS: NpcDefinition[] = [
     {
@@ -31,17 +32,17 @@ const NPCS: NpcDefinition[] = [
     },
 ];
 
-export class Game extends Scene {
+export class Game extends Scene implements GameAPI {
     private tileOutline!: Phaser.GameObjects.Image;
     private baseLayer!: Phaser.Tilemaps.TilemapLayer;
     private tileWidth = 16;
     private tileHeight = 16;
 
-    private player!: PlayerCharacter;
-    private npcs: NPC[] = [];
+    public player!: PlayerCharacter;
+    public npcs: NPC[] = [];
     private activeNpc: NPC | null = null;
 
-    private shopkeeper!: Shopkeeper;
+    public shopkeeper!: Shopkeeper;
     private activeShopkeeper: Shopkeeper | null = null;
 
     private userProfile!: UserProfile;
@@ -70,6 +71,7 @@ export class Game extends Scene {
         Character.preloadSpritesheets(this.load, "player", "assets/Characters/Player");
         NPC.preloadAll(this.load, NPCS);
         Shopkeeper.preload(this.load);
+        feature.onPreload(this);
     }
 
     create() {
@@ -99,6 +101,7 @@ export class Game extends Scene {
         this.registry.set("cardsOpen", false);
         this.registry.set("pendingCards", []);
         this.registry.set("unlockedAchievements", [] as string[]);
+        this.registry.set("cropGrowthMultiplier", 1);
 
         const savedState = restoreState(this.registry);
         if (savedState?.plantedCrops) {
@@ -116,6 +119,18 @@ export class Game extends Scene {
         this.registry.events.on("changedata-shopOpen", (_: unknown, value: boolean) => {
             if (this._settingFromGame) return;
             if (!value && this.isConversationOpen) this.setShopOpen(false);
+        });
+
+        this.registry.events.on("changedata-gold", (_: unknown, newAmount: number) => {
+            feature.onGoldChanged(this, newAmount);
+        });
+
+        let prevAchievementCount = (this.registry.get("unlockedAchievements") as string[]).length;
+        this.registry.events.on("changedata-unlockedAchievements", (_: unknown, unlocked: string[]) => {
+            if (unlocked.length > prevAchievementCount) {
+                feature.onAchievementUnlocked(this, unlocked[unlocked.length - 1]);
+            }
+            prevAchievementCount = unlocked.length;
         });
 
         if (!this.scene.isActive("Hud")) {
@@ -150,6 +165,8 @@ export class Game extends Scene {
         this.scale.on(Phaser.Scale.Events.RESIZE, () => {
             updateCameraDeadZone(camera);
         });
+
+        feature.onCreate(this);
     }
 
     update(_time: number, delta: number) {
@@ -168,9 +185,36 @@ export class Game extends Scene {
             npc.update(delta);
         }
         this.shopkeeper.update(delta);
-        Crop.updateAll(delta);
+        const growthMultiplier = this.registry.get("cropGrowthMultiplier") as number;
+        Crop.updateAll(delta * growthMultiplier);
 
         updateTileOutline(this, this.tileOutline, this.player.sprite, this.tileWidth, this.tileHeight);
+    }
+
+    addGold(amount: number): void {
+        const current = this.registry.get("gold") as number;
+        this.registry.set("gold", current + amount);
+    }
+
+    addCrops(type: CropType, count: number): void {
+        const counts = { ...(this.registry.get("cropCounts") as Record<CropType, number>) };
+        counts[type] = (counts[type] ?? 0) + count;
+        this.registry.set("cropCounts", counts);
+    }
+
+    unlockAchievement(id: string): void {
+        const unlocked = this.registry.get("unlockedAchievements") as string[];
+        if (!unlocked.includes(id)) {
+            this.registry.set("unlockedAchievements", [...unlocked, id]);
+        }
+    }
+
+    teleportPlayer(x: number, y: number): void {
+        this.player.sprite.setPosition(x, y);
+    }
+
+    setCropGrowthMultiplier(multiplier: number): void {
+        this.registry.set("cropGrowthMultiplier", multiplier);
     }
 
     private debug() {
@@ -221,7 +265,7 @@ export class Game extends Scene {
         }
     }
 
-    private setConversationOpen(open: boolean) {
+    public setConversationOpen(open: boolean) {
         this.isConversationOpen = open;
         this.player.setPaused(open);
         if (this.activeNpc) {
@@ -252,7 +296,7 @@ export class Game extends Scene {
         this._settingFromGame = false;
     }
 
-    private setShopOpen(open: boolean) {
+    public setShopOpen(open: boolean) {
         this.isConversationOpen = open;
         this.player.setPaused(open);
         if (this.activeShopkeeper) {
@@ -264,5 +308,10 @@ export class Game extends Scene {
         this._settingFromGame = true;
         this.registry.set("shopOpen", open);
         this._settingFromGame = false;
+        if (open) {
+            feature.onShopOpen(this);
+        } else {
+            feature.onShopClose(this);
+        }
     }
 }

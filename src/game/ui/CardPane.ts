@@ -138,12 +138,17 @@ export class CardPane {
 
     private confirm(): void {
         saveState(this.scene.registry);
+        this.scene.registry.set(CardPane.REGISTRY_KEY, false);
         fetch('/api/implement', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(this.cards[this.selectedIndex]),
-        }).catch(err => console.error('[IMPLEMENT]', err));
-        this.scene.registry.set(CardPane.REGISTRY_KEY, false);
+        }).then(res => {
+            if (!res.ok) {
+                res.json().then(body => console.error('[IMPLEMENT] Server error:', body)).catch(() => {});
+                console.error(`[IMPLEMENT] Request failed with status ${res.status}`);
+            }
+        }).catch(err => console.error('[IMPLEMENT] Network error:', err));
     }
 
     private drawCards(): void {

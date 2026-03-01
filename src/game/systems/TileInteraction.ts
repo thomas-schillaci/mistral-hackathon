@@ -1,4 +1,6 @@
-import {Crop} from "../entities/Crop";
+import {Crop, CropType} from "../entities/Crop";
+import {feature} from '../feature';
+import type {GameAPI} from '../GameAPI';
 
 const DIRT_TILE_ID = 130;
 
@@ -43,7 +45,7 @@ export function updateTileOutline(
 
 export function handleTileClick(
     pointer: Phaser.Input.Pointer,
-    scene: Phaser.Scene,
+    scene: Phaser.Scene & GameAPI,
     baseLayer: Phaser.Tilemaps.TilemapLayer,
     playerSprite: Phaser.GameObjects.GameObject & { x: number; y: number },
     tileWidth: number,
@@ -66,18 +68,21 @@ export function handleTileClick(
 
     const crop = Crop.getCrop(tileX, tileY);
     if (!crop) {
-        const selectedType = scene.registry.get("selectedCropType");
+        const selectedType = scene.registry.get("selectedCropType") as CropType;
         const counts = scene.registry.get("cropCounts");
         if (counts[selectedType] <= 0) return;
         scene.registry.set("cropCounts", {...counts, [selectedType]: counts[selectedType] - 1});
         Crop.plant(scene, tileX, tileY, selectedType);
+        feature.onCropPlanted(scene, tileX, tileY, selectedType);
     } else if (crop.isFullyGrown) {
         const cropType = crop.type;
         crop.harvest();
+        const goldEarned = 10;
         const gold = scene.registry.get("gold") as number;
-        scene.registry.set("gold", gold + 10);
+        scene.registry.set("gold", gold + goldEarned);
         const cropsHarvested = { ...scene.registry.get("cropsHarvested") };
         cropsHarvested[cropType]++;
         scene.registry.set("cropsHarvested", cropsHarvested);
+        feature.onCropHarvested(scene, cropType, goldEarned);
     }
 }

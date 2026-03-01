@@ -1,3 +1,4 @@
+src/game/GameAPI.ts
 src/game/GameState.ts
 src/game/UserProfile.ts
 src/game/entities/Character.ts
@@ -21,3 +22,27 @@ src/game/ui/GoldCounter.ts
 src/game/ui/Hotbar.ts
 src/game/ui/ShopPane.ts
 src/game/ui/styles.ts
+
+ASSETS (paths are relative to public/ — use as-is in scene.load calls):
+assets/Characters/Luke/Idle.png
+assets/Characters/Luke/Walk.png
+assets/Characters/Player/Idle.png
+assets/Characters/Player/Walk.png
+assets/Characters/ShopKeeper/Idle.png
+assets/Farm Animals/Baby Chicken Yellow.png
+assets/Farm Animals/Chicken Blonde  Green.png
+assets/Farm Animals/Chicken Red.png
+assets/Farm Animals/Female Cow Brown.png
+assets/Farm Animals/Male Cow Brown.png
+assets/Objects/Fence's copiar.png
+assets/Objects/House.png
+assets/Objects/Interior.png
+assets/Objects/Maple Tree.png
+assets/Objects/Road copiar.png
+assets/Objects/Spring Crops.png
+assets/Objects/chest.png
+assets/Tileset/Tileset Spring.png
+assets/UI/outline.png
+assets/achievements.json
+assets/dialogue/luke.json
+assets/maps/map.tmj

@@ -1,35 +1,26 @@
-import Phaser from 'phaser';
-import { Crop, CropType } from './entities/Crop';
-
-// Extend the CropType union to include mystery_seed
-type ExtendedCropType = CropType | "mystery_seed";
-
-const MYSTERY_SEED_TYPE: ExtendedCropType = "mystery_seed";
-const POSSIBLE_CROP_TYPES: CropType[] = ["strawberry", "leek", "potato", "onion"];
+import type { GameAPI } from './GameAPI';
+import type { CropType } from './entities/Crop';
 
 export const feature = {
-    onUpdate: (scene: Phaser.Scene, delta: number) => {
-        // No update logic needed for mystery seeds
-    },
+    onPreload: (_scene: GameAPI) => {},
 
-    onNpcTalkStart: (scene: Phaser.Scene, npcId: string) => {
-        // No NPC interaction logic needed for mystery seeds
-    },
+    onCreate: (_scene: GameAPI) => {},
 
-    onConversationEnd: (scene: Phaser.Scene, npcId: string) => {
-        // No conversation end logic needed for mystery seeds
-    }
-};
+    onUpdate: (_scene: GameAPI, _delta: number) => {},
 
-// Override the original plant method to handle mystery seeds
-const originalPlant = Crop.plant;
-Crop.plant = function(scene: Phaser.Scene, tileX: number, tileY: number, type: ExtendedCropType) {
-    if (type === MYSTERY_SEED_TYPE) {
-        // Randomly select a crop type for mystery seeds
-        const randomIndex = Math.floor(Math.random() * POSSIBLE_CROP_TYPES.length);
-        const randomType = POSSIBLE_CROP_TYPES[randomIndex];
-        originalPlant(scene, tileX, tileY, randomType);
-    } else {
-        originalPlant(scene, tileX, tileY, type as CropType);
-    }
+    onNpcTalkStart: (_scene: GameAPI, _npcId: string) => {},
+
+    onConversationEnd: (_scene: GameAPI, _npcId: string) => {},
+
+    onCropPlanted: (_scene: GameAPI, _tileX: number, _tileY: number, _cropType: CropType) => {},
+
+    onCropHarvested: (_scene: GameAPI, _cropType: CropType, _goldEarned: number) => {},
+
+    onGoldChanged: (_scene: GameAPI, _newAmount: number) => {},
+
+    onShopOpen: (_scene: GameAPI) => {},
+
+    onShopClose: (_scene: GameAPI) => {},
+
+    onAchievementUnlocked: (_scene: GameAPI, _achievementId: string) => {},
 };

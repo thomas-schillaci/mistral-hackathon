@@ -175,6 +175,12 @@ export class DialoguePane {
     }
 
     private goToLine(index: number): void {
+        if (index < 0 || index >= this.script.length) {
+            console.error(`[DialoguePane] goToLine(${index}) out of bounds (script length: ${this.script.length}). Closing dialogue.`);
+            this.scene.registry.set(DialoguePane.REGISTRY_KEY, false);
+            return;
+        }
+
         this.currentLineIndex = index;
         this.selectedOptionIndex = 0;
 
